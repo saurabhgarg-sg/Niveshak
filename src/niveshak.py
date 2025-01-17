@@ -11,7 +11,8 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 
 class Niveshak:
-    def get_watchlists(self) -> dict:
+    @staticmethod
+    def get_watchlists() -> dict:
         """Get all the watchlists.
         :rtype: dict
         """
