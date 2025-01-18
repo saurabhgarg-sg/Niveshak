@@ -1,0 +1,4 @@
+nsetools
+pandas
+streamlit
+watchdog
