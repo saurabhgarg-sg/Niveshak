@@ -3,11 +3,10 @@ import os
 import sys
 from pprint import pformat
 
-import streamlit as st
-
+from constants.config import Configuration
 from constants.datafiles import DataFiles
 
-logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+logging.basicConfig(stream=sys.stdout, level=Configuration.LOG_LEVEL)
 
 
 class Watchlists:
@@ -30,15 +29,3 @@ class Watchlists:
             if entry.is_file():
                 self.watchlists[entry.name] = self.read_symbols(entry.path)
         logging.debug(pformat(self.watchlists))
-
-    def select_list(self):
-        """Show the main page to start the scanners."""
-        self.get_all()
-        option = st.selectbox(
-            "Which list to scan?",
-            sorted(self.watchlists.keys()),
-            index=None,
-            placeholder="select a list",
-        )
-        st.write("displaying watchlist: ", option)
-        return option

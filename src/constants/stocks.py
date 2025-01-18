@@ -1,14 +1,14 @@
-from enum import StrEnum
+from enum import Enum
 
 
-class Keys(StrEnum):
+class InfoKeys(Enum):
     """List of all the keys of interest from Nifty stock data.`"""
 
     """Informational"""
     BASIC_INDSUTRY = ["industryInfo", "basicIndustry"]
     INDSUTRY = ["industryInfo", "industry"]
     SECTOR = ["industryInfo", "sector"]
-    COMPANY_NAME = ["companyName"]
+    COMPANY_NAME = ["info", "companyName"]
 
     """Price information"""
     LAST_PRICE = ["priceInfo", "lastPrice"]
