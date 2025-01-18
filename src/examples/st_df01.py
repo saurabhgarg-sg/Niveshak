@@ -5,7 +5,7 @@ Here's our first attempt at using data to create a table:
 
 import pandas as pd
 
-import st_df01 as st
+import streamlit as st
 
 st.write("Here's our first attempt at using data to create a table:")
 st.write(
