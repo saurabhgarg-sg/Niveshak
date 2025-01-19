@@ -16,30 +16,34 @@ class Nifty:
     """Implements all the NSE related ops."""
 
     def __init__(self):
-        self.stock_info = None
+        pass
 
-    def get_stock_info(self, symbol="SBIN"):
+    @staticmethod
+    @st.cache_data
+    def get_stock_info(symbol: str):
         """fetch individual stock information."""
         raw_info = nse_eq(symbol)
         assert raw_info, f"failed to get info on '{symbol}'."
         logging.debug(pformat(raw_info))
 
-        self.stock_info = {"SYMBOL": symbol}
+        stock_info = {"SYMBOL": symbol}
         for infokey in InfoKeys:
             # construct the key to fetch the value.
             infoval = raw_info
             for key in infokey.value:
                 infoval = infoval[key]
-            self.stock_info[infokey.name] = infoval
-        logging.debug(pformat(self.stock_info))
-        return self.stock_info
+            stock_info[infokey.name] = infoval
+        logging.debug(pformat(stock_info))
+        return stock_info
 
     def show_list_info(self, stock_list: list):
         """display the stock information for each of the list element."""
-        # data = [self.get_stock_info(stock) for stock in stock_list]
+        # Configure progress bar to display.
         progress = 0
         bar = st.progress(progress)
         counter = 1 / len(stock_list)
+
+        # Fetch the quotes for each stock in the watchlist.
         data = []
         for stock in stock_list:
             progress += counter
