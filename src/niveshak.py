@@ -29,9 +29,9 @@ class Niveshak:
         st.write("displaying watchlist: ", self.list_name)
         if self.list_name:
             self.list_symbols = wl.watchlists[self.list_name]
-            self.show_wathclist_info()
+            self.show_watchlist_info()
 
-    def show_wathclist_info(self):
+    def show_watchlist_info(self):
         """display the information about all the symbols in the list."""
         nse = Nifty()
         st.write(nse.show_list_info(stock_list=self.list_symbols))
