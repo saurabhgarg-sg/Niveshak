@@ -52,3 +52,9 @@ class Nifty:
         logging.debug(pformat(data))
 
         return pd.DataFrame(data)
+
+    @staticmethod
+    @st.cache_data
+    def get_historical_data(symbol: str):
+        """get historical data for any stock."""
+        pass
