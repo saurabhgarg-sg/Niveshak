@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, StrEnum
 
 
 class InfoKeys(Enum):
@@ -19,3 +19,11 @@ class InfoKeys(Enum):
     YEAR_LOW = ["priceInfo", "weekHighLow", "min"]
     UPPER_CKT = ["priceInfo", "upperCP"]
     LOWER_CKT = ["priceInfo", "lowerCP"]
+
+
+class NSE(StrEnum):
+    """NSE stock related constants."""
+
+    STOCK_CODE = "EQ"
+    DATE_FORMAT = "%d-%m-%Y"
+    LOOKBACK_DAYS = "180"
