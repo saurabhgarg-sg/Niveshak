@@ -35,6 +35,8 @@ class Niveshak:
         """display the information about all the symbols in the list."""
         nse = Nifty()
         st.write(nse.show_list_info(stock_list=self.list_symbols))
+        st.write(nse.get_historical_data("SBIN"))
+        Nifty.stock_rsi("SBIN")
 
     def display_welcome_page(self) -> None:
         """Show the main page to start the scanners."""

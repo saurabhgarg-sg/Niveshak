@@ -27,3 +27,10 @@ class NSE(StrEnum):
     STOCK_CODE = "EQ"
     DATE_FORMAT = "%d-%m-%Y"
     LOOKBACK_DAYS = "180"
+
+    # Historical data columns.
+    HISTCOL_CLOSE = "CH_CLOSING_PRICE"
+    HISTCOL_SORTER = "CH_TIMESTAMP"
+
+    # Indicator settings.
+    RSI_PERIOD = "14"

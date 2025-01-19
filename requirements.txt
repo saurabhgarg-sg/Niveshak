@@ -1,4 +1,5 @@
 nsepython
 pandas
 streamlit
+ta-lib
 watchdog

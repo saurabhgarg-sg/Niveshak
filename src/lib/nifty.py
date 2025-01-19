@@ -4,19 +4,18 @@ from pprint import pformat
 
 import pandas as pd
 import streamlit as st
-from nsepython import nse_eq
+import talib
+from nsepython import nse_eq, equity_history
 
 from constants.config import Configuration
-from constants.stocks import InfoKeys
+from constants.stocks import InfoKeys, NSE
+from lib.utils import Utils
 
 logging.basicConfig(stream=sys.stdout, level=Configuration.LOG_LEVEL)
 
 
 class Nifty:
     """Implements all the NSE related ops."""
-
-    def __init__(self):
-        pass
 
     @staticmethod
     @st.cache_data
@@ -33,8 +32,22 @@ class Nifty:
             for key in infokey.value:
                 infoval = infoval[key]
             stock_info[infokey.name] = infoval
+        stock_info["RSI"] = Nifty.stock_rsi(symbol)
         logging.debug(pformat(stock_info))
         return stock_info
+
+    @staticmethod
+    @st.cache_data
+    def get_historical_data(symbol: str):
+        """get historical data for any stock."""
+        historical_data = equity_history(
+            symbol=symbol,
+            series=NSE.STOCK_CODE,
+            start_date=Utils.get_lookback_date(),
+            end_date=Utils.get_ist_date(),
+        )
+        historical_data.sort_values(by=NSE.HISTCOL_SORTER, ascending=True, inplace=True)
+        return historical_data
 
     def show_list_info(self, stock_list: list):
         """display the stock information for each of the list element."""
@@ -55,6 +68,7 @@ class Nifty:
 
     @staticmethod
     @st.cache_data
-    def get_historical_data(symbol: str):
-        """get historical data for any stock."""
-        pass
+    def stock_rsi(symbol):
+        data = Nifty.get_historical_data(symbol)
+        rsi_data = talib.RSI(data[NSE.HISTCOL_CLOSE], int(NSE.RSI_PERIOD))
+        return round(float(rsi_data.iloc[-1]), 2)
