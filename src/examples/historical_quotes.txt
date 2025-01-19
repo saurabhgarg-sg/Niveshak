@@ -1,0 +1,20 @@
+                        _id CH_SYMBOL CH_SERIES CH_MARKET_TYPE CH_TIMESTAMP  \
+0  678a467f8cc9267607deba3d      SBIN        EQ              N   2025-01-17
+
+                  TIMESTAMP  CH_TRADE_HIGH_PRICE  CH_TRADE_LOW_PRICE  \
+0  2025-01-16T18:30:00.000Z               767.95               759.4
+
+   CH_OPENING_PRICE  CH_CLOSING_PRICE  CH_LAST_TRADED_PRICE  \
+0             766.3             764.1                 763.8
+
+   CH_PREVIOUS_CLS_PRICE  CH_TOT_TRADED_QTY  CH_TOT_TRADED_VAL  \
+0                  766.3            5766573       4.403052e+09
+
+   CH_52WEEK_HIGH_PRICE  CH_52WEEK_LOW_PRICE  CH_TOTAL_TRADES       CH_ISIN  \
+0                   912               600.65           147029  INE062A01020
+
+                  createdAt                 updatedAt  __v SLBMH_TOT_VAL  \
+0  2025-01-17T12:01:03.640Z  2025-01-17T12:01:03.640Z    0          None
+
+     VWAP   mTIMESTAMP
+0  763.55  17-Jan-2025

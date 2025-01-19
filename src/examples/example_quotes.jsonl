@@ -1,0 +1,311 @@
+{
+  'currentMarketType': 'NM',
+  'industryInfo': {
+    'basicIndustry': 'Mutual Fund Scheme',
+    'industry': 'Capital Markets',
+    'macro': 'Financial Services',
+    'sector': 'Financial Services'
+  },
+  'info': {
+    'activeSeries': [
+      'EQ'
+    ],
+    'companyName': 'Aditya Birla Sun Life Mutual Fund-Aditya Birla Sun '
+    'Life Nifty PSE ETF',
+    'debtSeries': [],
+    'identifier': 'ABSLPSEEQN',
+    'industry': 'Mutual Fund Scheme',
+    'isCASec': False,
+    'isDebtSec': False,
+    'isDelisted': False,
+    'isETFSec': True,
+    'isFNOSec': False,
+    'isMunicipalBond': False,
+    'isSLBSec': True,
+    'isSuspended': False,
+    'isTop10': False,
+    'isin': 'INF209KB19Z4',
+    'listingDate': '2024-05-23',
+    'slb_isin': 'INF209KB19Z4',
+    'symbol': 'ABSLPSE',
+    'tempSuspendedSeries': []
+  },
+  'metadata': {
+    'industry': 'Mutual Fund Scheme',
+    'isin': 'INF209KB19Z4',
+    'lastUpdateTime': '17-Jan-2025 16:00:00',
+    'listingDate': '23-May-2024',
+    'pdSectorInd': 'NA',
+    'pdSectorIndAll': 'NA',
+    'pdSectorPe': 'NA',
+    'pdSymbolPe': 'NA',
+    'series': 'EQ',
+    'status': 'Listed',
+    'symbol': 'ABSLPSE'
+  },
+  'preOpenMarket': {
+    'ato': {
+      'buy': 0,
+      'sell': 0
+    },
+    'preopen': [
+      {
+        'iep': True
+      }
+    ]
+  },
+  'priceInfo': {
+    'basePrice': 0,
+    'change': 0.08999999999999986,
+    'checkINAV': True,
+    'close': 9.44,
+    'iNavValue': '9.44',
+    'ieq': '',
+    'intraDayHighLow': {
+      'max': 9.47,
+      'min': 9.21,
+      'value': 9.42
+    },
+    'lastPrice': 9.42,
+    'lowerCP': '7.35',
+    'open': 9.37,
+    'pChange': 0.9646302250803843,
+    'pPriceBand': '20',
+    'previousClose': 9.33,
+    'stockIndClosePrice': 0,
+    'tickSize': 0.01,
+    'upperCP': '11.02',
+    'vwap': 9.41,
+    'weekHighLow': {
+      'max': 11.82,
+      'maxDate': '01-Aug-2024',
+      'min': 8.83,
+      'minDate': '13-Jan-2025',
+      'value': 9.42
+    }
+  },
+  'sddDetails': {
+    'SDDAuditor': '-',
+    'SDDStatus': '-'
+  },
+  'securityInfo': {
+    'boardStatus': 'Main',
+    'classOfShare': 'Equity',
+    'derivatives': 'No',
+    'faceValue': 1,
+    'issuedSize': 33701031,
+    'sessionNo': '-',
+    'slb': 'Yes',
+    'surveillance': {
+      'desc': None,
+      'surv': None
+    },
+    'tradingSegment': 'Normal Market',
+    'tradingStatus': 'Active'
+  }
+}
+{
+  'currentMarketType': 'NM',
+  'industryInfo': {
+    'basicIndustry': 'Public Sector Bank',
+    'industry': 'Banks',
+    'macro': 'Financial Services',
+    'sector': 'Financial Services'
+  },
+  'info': {
+    'activeSeries': [
+      'EQ',
+      'T0'
+    ],
+    'companyName': 'State Bank of India',
+    'debtSeries': [],
+    'identifier': 'SBINEQN',
+    'industry': 'Public Sector Bank',
+    'isCASec': False,
+    'isDebtSec': False,
+    'isDelisted': False,
+    'isETFSec': False,
+    'isFNOSec': True,
+    'isMunicipalBond': False,
+    'isSLBSec': True,
+    'isSuspended': False,
+    'isTop10': False,
+    'isin': 'INE062A01020',
+    'listingDate': '1995-03-01',
+    'slb_isin': 'INE062A01020',
+    'symbol': 'SBIN',
+    'tempSuspendedSeries': [
+      'N4',
+      'N1',
+      'N3',
+      'IL',
+      'N2',
+      'N6',
+      'N5'
+    ]
+  },
+  'metadata': {
+    'industry': 'Public Sector Bank',
+    'isin': 'INE062A01020',
+    'lastUpdateTime': '17-Jan-2025 16:00:00',
+    'listingDate': '01-Mar-1995',
+    'pdSectorInd': 'NIFTY 50',
+    'pdSectorIndAll': [
+      'NIFTY 50',
+      'NIFTY BANK',
+      'NIFTY FINANCIAL SERVICES',
+      'NIFTY PSU BANK',
+      'NIFTY 200',
+      'NIFTY DIVIDEND OPPORTUNITIES 50',
+      'NIFTY50 VALUE 20',
+      'NIFTY100 LIQUID 15',
+      'NIFTY HIGH BETA 50',
+      'NIFTY100 EQUAL WEIGHT',
+      'NIFTY500 VALUE 50',
+      'NIFTY RURAL',
+      'NIFTY50 EQUAL WEIGHT',
+      'NIFTY LARGEMIDCAP 250',
+      'NIFTY FINANCIAL SERVICES 25/50',
+      'NIFTY500 LARGEMIDSMALL EQUAL-CAP WEIGHTED',
+      'NIFTY100 ENHANCED ESG',
+      'NIFTY TOP 20 EQUAL WEIGHT',
+      'NIFTY TOP 15 EQUAL WEIGHT',
+      'NIFTY500 LOW VOLATILITY 50',
+      'NIFTY HOUSING',
+      'NIFTY TOTAL MARKET',
+      'NIFTY100 ESG',
+      'NIFTY500 EQUAL WEIGHT',
+      'NIFTY200 VALUE 30',
+      'NIFTY500 MULTICAP 50:25:25',
+      'NIFTY 500',
+      'NIFTY SERVICES SECTOR',
+      'NIFTY 100',
+      'NIFTY ALPHA LOW-VOLATILITY 30'
+    ],
+    'pdSectorPe': 8.75,
+    'pdSymbolPe': 9.38,
+    'series': 'EQ',
+    'status': 'Listed',
+    'symbol': 'SBIN'
+  },
+  'preOpenMarket': {
+    'Change': 0,
+    'IEP': 766.3,
+    'ato': {
+      'buy': 0,
+      'sell': 0
+    },
+    'atoBuyQty': 0,
+    'atoSellQty': 0,
+    'finalPrice': 766.3,
+    'finalQuantity': 19811,
+    'lastUpdateTime': '17-Jan-2025 09:07:40',
+    'perChange': 0,
+    'preopen': [
+      {
+        'buyQty': 5,
+        'price': 765.15,
+        'sellQty': 0
+      },
+      {
+        'buyQty': 25,
+        'price': 765.3,
+        'sellQty': 0
+      },
+      {
+        'buyQty': 100,
+        'price': 765.5,
+        'sellQty': 0
+      },
+      {
+        'buyQty': 10,
+        'price': 765.65,
+        'sellQty': 0
+      },
+      {
+        'buyQty': 181,
+        'price': 766,
+        'sellQty': 0
+      },
+      {
+        'buyQty': 0,
+        'iep': True,
+        'price': 766.3,
+        'sellQty': 3382
+      },
+      {
+        'buyQty': 0,
+        'price': 767,
+        'sellQty': 482
+      },
+      {
+        'buyQty': 0,
+        'price': 767.3,
+        'sellQty': 750
+      },
+      {
+        'buyQty': 0,
+        'price': 767.45,
+        'sellQty': 96
+      },
+      {
+        'buyQty': 0,
+        'price': 767.55,
+        'sellQty': 7
+      }
+    ],
+    'prevClose': 766.3,
+    'totalBuyQuantity': 107058,
+    'totalSellQuantity': 181552,
+    'totalTradedVolume': 19811
+  },
+  'priceInfo': {
+    'basePrice': 766.3,
+    'change': -2.5,
+    'checkINAV': False,
+    'close': 764.1,
+    'iNavValue': None,
+    'ieq': '',
+    'intraDayHighLow': {
+      'max': 767.95,
+      'min': 759.4,
+      'value': 763.8
+    },
+    'lastPrice': 763.8,
+    'lowerCP': '689.70',
+    'open': 766.3,
+    'pChange': -0.32624298577580585,
+    'pPriceBand': 'No Band',
+    'previousClose': 766.3,
+    'stockIndClosePrice': 0,
+    'tickSize': 0.05,
+    'upperCP': '842.90',
+    'vwap': 763.54,
+    'weekHighLow': {
+      'max': 912,
+      'maxDate': '03-Jun-2024',
+      'min': 600.65,
+      'minDate': '23-Jan-2024',
+      'value': 763.8
+    }
+  },
+  'sddDetails': {
+    'SDDAuditor': '-',
+    'SDDStatus': '-'
+  },
+  'securityInfo': {
+    'boardStatus': 'Main',
+    'classOfShare': 'Equity',
+    'derivatives': 'Yes',
+    'faceValue': 1,
+    'issuedSize': 8924620034,
+    'sessionNo': '-',
+    'slb': 'Yes',
+    'surveillance': {
+      'desc': None,
+      'surv': None
+    },
+    'tradingSegment': 'Normal Market',
+    'tradingStatus': 'Active'
+  }
+}
