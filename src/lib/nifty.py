@@ -42,6 +42,9 @@ class Nifty:
         stock_info["%K"] = Nifty.stock_stochastic(symbol)[0]
         stock_info["%D"] = Nifty.stock_stochastic(symbol)[1]
 
+        # Deduce signal for trade.
+        stock_info["SIGNAL"] = Nifty.guess_trade_signal(stock_info)
+
         logging.debug(pformat(stock_info))
         return stock_info
 
@@ -117,3 +120,32 @@ class Nifty:
             fastd_period=5,
         )
         return [round(float(st_data.iloc[-1]), 2) for st_data in stoch_data]
+
+    @staticmethod
+    @st.cache_data
+    def guess_trade_signal(stock_info):
+        signal = None
+        # stock_info["RSI"] = Nifty.stock_rsi(symbol)
+        # stock_info["ADX"] = Nifty.stock_adx(symbol)
+        # stock_info["BB_HIGH"] = Nifty.stock_bollinger_bands(symbol)[0]
+        # stock_info["BB_AVG"] = Nifty.stock_bollinger_bands(symbol)[1]
+        # stock_info["BB_LOW"] = Nifty.stock_bollinger_bands(symbol)[2]
+        # stock_info["%K"] = Nifty.stock_stochastic(symbol)[0]
+        # stock_info["%D"] = Nifty.stock_stochastic(symbol)[1]
+        if (
+                stock_info["RSI"] >= 70
+                and stock_info["ADX"] >= 25
+                and Utils.percetage_diff(stock_info["LAST_PRICE"], stock_info["BB_LOW"])
+                <= 1.0
+        ):
+            signal = "BUY"
+        elif (
+                stock_info["RSI"] <= 30
+                and stock_info["ADX"] >= 25
+                and Utils.percetage_diff(stock_info["LAST_PRICE"], stock_info["BB_HIGH"])
+                >= 1.0
+        ):
+            signal = "SELL"
+        else:
+            signal = "No Trend"
+        return signal

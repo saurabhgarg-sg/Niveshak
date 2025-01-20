@@ -16,3 +16,8 @@ class Utils:
         """return the start date for the historical data."""
         diff = datetime.datetime.now() - datetime.timedelta(delta)
         return Utils.get_ist_date(diff)
+
+    @staticmethod
+    def percetage_diff(price, indicator):
+        """calculate the percentage difference between indicator and stock price."""
+        return round((indicator - price) * 100 / price, 2)
