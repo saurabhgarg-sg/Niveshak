@@ -130,6 +130,7 @@ class Nifty:
                 and stock_info["ADX"] >= 25
                 and Utils.percetage_diff(stock_info["LAST_PRICE"], stock_info["BB_LOW"])
                 <= 1.0
+                and Utils.percetage_diff(stock_info["%K"], stock_info["%D"]) >= 0.10
         ):
             signal = "BUY"
         elif (
@@ -137,6 +138,7 @@ class Nifty:
                 and stock_info["ADX"] >= 25
                 and Utils.percetage_diff(stock_info["LAST_PRICE"], stock_info["BB_HIGH"])
                 >= 1.0
+                and Utils.percetage_diff(stock_info["%K"], stock_info["%D"]) <= 0.10
         ):
             signal = "SELL"
         else:
