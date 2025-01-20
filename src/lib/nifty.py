@@ -1,4 +1,5 @@
 import logging
+import math
 import sys
 from pprint import pformat
 
@@ -124,23 +125,43 @@ class Nifty:
     @staticmethod
     @st.cache_data
     def guess_trade_signal(stock_info):
-        signal = None
-        if (
-                stock_info["RSI"] >= 70
-                and stock_info["ADX"] >= 25
-                and Utils.percetage_diff(stock_info["LAST_PRICE"], stock_info["BB_LOW"])
+        signal = "Weak Trend"
+        adx = stock_info["ADX"] >= 25
+        stoch_breach = (
+                abs(Utils.percetage_diff(stock_info["%K"], stock_info["%D"])) <= 1.0
+        )
+        bb_high_breach = (
+                abs(Utils.percetage_diff(stock_info["LAST_PRICE"], stock_info["BB_LOW"]))
                 <= 1.0
-                and Utils.percetage_diff(stock_info["%K"], stock_info["%D"]) >= 0.10
-        ):
-            signal = "BUY"
-        elif (
-                stock_info["RSI"] <= 30
-                and stock_info["ADX"] >= 25
-                and Utils.percetage_diff(stock_info["LAST_PRICE"], stock_info["BB_HIGH"])
-                >= 1.0
-                and Utils.percetage_diff(stock_info["%K"], stock_info["%D"]) <= 0.10
-        ):
-            signal = "SELL"
-        else:
-            signal = "No Trend"
+        )
+        bb_low_breach = (
+                abs(Utils.percetage_diff(stock_info["LAST_PRICE"], stock_info["BB_LOW"]))
+                <= 1.0
+        )
+
+        """
+            1. No trend with ADX < 25.0
+            2. Stochastic Oscillator intersection indicates trend reversal
+            3. Proximity to BB high and low values show potential reversal
+            4. Favourable RSI value indicates strong trend
+        """
+        if adx:
+            if bb_high_breach:
+                if stoch_breach:
+                    if stock_info["RSI"] <= 30:
+                        signal = "Strong BUY"
+                    else:
+                        signal = "Breakout BUY"
+                else:
+                    signal = "Continued Uptrend"
+
+            if bb_high_breach:
+                if stoch_breach:
+                    if stock_info["RSI"] >= 70:
+                        signal = "Strong SELL"
+                    else:
+                        signal = "Breakout SELL"
+                else:
+                    signal = "Continued Downtrend"
+
         return signal
