@@ -30,7 +30,9 @@ class NSE(StrEnum):
 
     # Historical data columns.
     HISTCOL_CLOSE = "CH_CLOSING_PRICE"
+    HISTCOL_HIGH = "CH_TRADE_HIGH_PRICE"
+    HISTCOL_LOW = "CH_TRADE_LOW_PRICE"
     HISTCOL_SORTER = "CH_TIMESTAMP"
 
     # Indicator settings.
-    RSI_PERIOD = "14"
+    INDICATOR_TIMEPERIOD = "14"

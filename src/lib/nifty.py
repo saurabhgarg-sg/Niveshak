@@ -33,6 +33,7 @@ class Nifty:
                 infoval = infoval[key]
             stock_info[infokey.name] = infoval
         stock_info["RSI"] = Nifty.stock_rsi(symbol)
+        stock_info["ADX"] = Nifty.stock_adx(symbol)
         logging.debug(pformat(stock_info))
         return stock_info
 
@@ -70,5 +71,31 @@ class Nifty:
     @st.cache_data
     def stock_rsi(symbol):
         data = Nifty.get_historical_data(symbol)
-        rsi_data = talib.RSI(data[NSE.HISTCOL_CLOSE], int(NSE.RSI_PERIOD))
+        rsi_data = talib.RSI(data[NSE.HISTCOL_CLOSE], int(NSE.INDICATOR_TIMEPERIOD))
+        return round(float(rsi_data.iloc[-1]), 2)
+
+    @staticmethod
+    @st.cache_data
+    def stock_bollinger_bands(symbol):
+        data = Nifty.get_historical_data(symbol)
+        rsi_data = talib.RSI(data[NSE.HISTCOL_CLOSE], int(NSE.INDICATOR_TIMEPERIOD))
+        return round(float(rsi_data.iloc[-1]), 2)
+
+    @staticmethod
+    @st.cache_data
+    def stock_adx(symbol):
+        data = Nifty.get_historical_data(symbol)
+        adx_data = talib.ADX(
+            high=data[NSE.HISTCOL_HIGH],
+            low=data[NSE.HISTCOL_LOW],
+            close=data[NSE.HISTCOL_CLOSE],
+            timeperiod=int(NSE.INDICATOR_TIMEPERIOD),
+        )
+        return round(float(adx_data.iloc[-1]), 2)
+
+    @staticmethod
+    @st.cache_data
+    def stock_stochastic(symbol):
+        data = Nifty.get_historical_data(symbol)
+        rsi_data = talib.RSI(data[NSE.HISTCOL_CLOSE], int(NSE.INDICATOR_TIMEPERIOD))
         return round(float(rsi_data.iloc[-1]), 2)
