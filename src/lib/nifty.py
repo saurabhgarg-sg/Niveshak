@@ -33,17 +33,19 @@ class Nifty:
                 infoval = infoval[key]
             stock_info[infokey.name] = infoval
 
-        # Add the calculated indicators.
-        stock_info["RSI"] = Nifty.stock_rsi(symbol)
-        stock_info["ADX"] = Nifty.stock_adx(symbol)
-        stock_info["BB_HIGH"] = Nifty.stock_bollinger_bands(symbol)[0]
-        stock_info["BB_AVG"] = Nifty.stock_bollinger_bands(symbol)[1]
-        stock_info["BB_LOW"] = Nifty.stock_bollinger_bands(symbol)[2]
-        stock_info["%K"] = Nifty.stock_stochastic(symbol)[0]
-        stock_info["%D"] = Nifty.stock_stochastic(symbol)[1]
+        data = Nifty.get_historical_data(symbol)
+        if not data.empty:
+            # Add the calculated indicators.
+            stock_info["RSI"] = Nifty.stock_rsi(symbol, data)
+            stock_info["ADX"] = Nifty.stock_adx(symbol, data)
+            stock_info["BB_HIGH"] = Nifty.stock_bollinger_bands(symbol, data)[0]
+            stock_info["BB_AVG"] = Nifty.stock_bollinger_bands(symbol, data)[1]
+            stock_info["BB_LOW"] = Nifty.stock_bollinger_bands(symbol, data)[2]
+            stock_info["%K"] = Nifty.stock_stochastic(symbol, data)[0]
+            stock_info["%D"] = Nifty.stock_stochastic(symbol, data)[1]
 
-        # Deduce signal for trade.
-        stock_info["SIGNAL"] = Nifty.guess_trade_signal(stock_info)
+            # Deduce signal for trade.
+            stock_info["SIGNAL"] = Nifty.guess_trade_signal(stock_info)
 
         logging.debug(pformat(stock_info))
         return stock_info
@@ -58,6 +60,11 @@ class Nifty:
             start_date=Utils.get_lookback_date(),
             end_date=Utils.get_ist_date(),
         )
+
+        if historical_data.empty:
+            logging.error(f"failed to get any data, check the symbol '{symbol}'.")
+            return historical_data
+
         historical_data.sort_values(by=NSE.HISTCOL_SORTER, ascending=True, inplace=True)
         return historical_data
 
@@ -80,15 +87,13 @@ class Nifty:
 
     @staticmethod
     @st.cache_data
-    def stock_rsi(symbol):
-        data = Nifty.get_historical_data(symbol)
+    def stock_rsi(symbol, data):
         rsi_data = talib.RSI(data[NSE.HISTCOL_CLOSE], int(NSE.DEFAULT_TIMEPERIOD))
         return round(float(rsi_data.iloc[-1]), 2)
 
     @staticmethod
     @st.cache_data
-    def stock_bollinger_bands(symbol):
-        data = Nifty.get_historical_data(symbol)
+    def stock_bollinger_bands(symbol, data):
         bband_data = talib.BBANDS(
             data[NSE.HISTCOL_CLOSE],
             int(NSE.BBAND_TIMEPERIOD),
@@ -97,8 +102,7 @@ class Nifty:
 
     @staticmethod
     @st.cache_data
-    def stock_adx(symbol):
-        data = Nifty.get_historical_data(symbol)
+    def stock_adx(symbol, data):
         adx_data = talib.ADX(
             high=data[NSE.HISTCOL_HIGH],
             low=data[NSE.HISTCOL_LOW],
@@ -109,8 +113,7 @@ class Nifty:
 
     @staticmethod
     @st.cache_data
-    def stock_stochastic(symbol):
-        data = Nifty.get_historical_data(symbol)
+    def stock_stochastic(symbol, data):
         # Use the values for Stochastic Oscillator 21,5,5 for conservative medium term swing trading.
         stoch_data = talib.STOCHF(
             high=data[NSE.HISTCOL_HIGH],
