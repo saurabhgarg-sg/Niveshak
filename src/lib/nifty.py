@@ -1,5 +1,4 @@
 import logging
-import math
 import sys
 from pprint import pformat
 
