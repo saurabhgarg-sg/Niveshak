@@ -39,6 +39,8 @@ class Nifty:
         stock_info["BB_HIGH"] = Nifty.stock_bollinger_bands(symbol)[0]
         stock_info["BB_AVG"] = Nifty.stock_bollinger_bands(symbol)[1]
         stock_info["BB_LOW"] = Nifty.stock_bollinger_bands(symbol)[2]
+        stock_info["%K"] = Nifty.stock_stochastic(symbol)[0]
+        stock_info["%D"] = Nifty.stock_stochastic(symbol)[1]
 
         logging.debug(pformat(stock_info))
         return stock_info
@@ -106,5 +108,12 @@ class Nifty:
     @st.cache_data
     def stock_stochastic(symbol):
         data = Nifty.get_historical_data(symbol)
-        rsi_data = talib.RSI(data[NSE.HISTCOL_CLOSE], int(NSE.DEFAULT_TIMEPERIOD))
-        return round(float(rsi_data.iloc[-1]), 2)
+        # Use the values for Stochastic Oscillator 21,5,5 for conservative medium term swing trading.
+        stoch_data = talib.STOCHF(
+            high=data[NSE.HISTCOL_HIGH],
+            low=data[NSE.HISTCOL_LOW],
+            close=data[NSE.HISTCOL_CLOSE],
+            fastk_period=21,
+            fastd_period=5,
+        )
+        return [round(float(st_data.iloc[-1]), 2) for st_data in stoch_data]
