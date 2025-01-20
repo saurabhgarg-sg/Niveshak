@@ -32,8 +32,14 @@ class Nifty:
             for key in infokey.value:
                 infoval = infoval[key]
             stock_info[infokey.name] = infoval
+
+        # Add the calculated indicators.
         stock_info["RSI"] = Nifty.stock_rsi(symbol)
         stock_info["ADX"] = Nifty.stock_adx(symbol)
+        stock_info["BB_HIGH"] = Nifty.stock_bollinger_bands(symbol)[0]
+        stock_info["BB_AVG"] = Nifty.stock_bollinger_bands(symbol)[1]
+        stock_info["BB_LOW"] = Nifty.stock_bollinger_bands(symbol)[2]
+
         logging.debug(pformat(stock_info))
         return stock_info
 
@@ -71,15 +77,18 @@ class Nifty:
     @st.cache_data
     def stock_rsi(symbol):
         data = Nifty.get_historical_data(symbol)
-        rsi_data = talib.RSI(data[NSE.HISTCOL_CLOSE], int(NSE.INDICATOR_TIMEPERIOD))
+        rsi_data = talib.RSI(data[NSE.HISTCOL_CLOSE], int(NSE.DEFAULT_TIMEPERIOD))
         return round(float(rsi_data.iloc[-1]), 2)
 
     @staticmethod
     @st.cache_data
     def stock_bollinger_bands(symbol):
         data = Nifty.get_historical_data(symbol)
-        rsi_data = talib.RSI(data[NSE.HISTCOL_CLOSE], int(NSE.INDICATOR_TIMEPERIOD))
-        return round(float(rsi_data.iloc[-1]), 2)
+        bband_data = talib.BBANDS(
+            data[NSE.HISTCOL_CLOSE],
+            int(NSE.BBAND_TIMEPERIOD),
+        )
+        return [round(float(bb_data.iloc[-1]), 2) for bb_data in bband_data]
 
     @staticmethod
     @st.cache_data
@@ -89,7 +98,7 @@ class Nifty:
             high=data[NSE.HISTCOL_HIGH],
             low=data[NSE.HISTCOL_LOW],
             close=data[NSE.HISTCOL_CLOSE],
-            timeperiod=int(NSE.INDICATOR_TIMEPERIOD),
+            timeperiod=int(NSE.DEFAULT_TIMEPERIOD),
         )
         return round(float(adx_data.iloc[-1]), 2)
 
@@ -97,5 +106,5 @@ class Nifty:
     @st.cache_data
     def stock_stochastic(symbol):
         data = Nifty.get_historical_data(symbol)
-        rsi_data = talib.RSI(data[NSE.HISTCOL_CLOSE], int(NSE.INDICATOR_TIMEPERIOD))
+        rsi_data = talib.RSI(data[NSE.HISTCOL_CLOSE], int(NSE.DEFAULT_TIMEPERIOD))
         return round(float(rsi_data.iloc[-1]), 2)

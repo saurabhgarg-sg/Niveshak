@@ -35,4 +35,6 @@ class NSE(StrEnum):
     HISTCOL_SORTER = "CH_TIMESTAMP"
 
     # Indicator settings.
-    INDICATOR_TIMEPERIOD = "14"
+    DEFAULT_TIMEPERIOD = "14"
+    BBAND_TIMEPERIOD = "20"
+    BBAND_DEVIATION = "2"
