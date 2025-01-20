@@ -125,13 +125,6 @@ class Nifty:
     @st.cache_data
     def guess_trade_signal(stock_info):
         signal = None
-        # stock_info["RSI"] = Nifty.stock_rsi(symbol)
-        # stock_info["ADX"] = Nifty.stock_adx(symbol)
-        # stock_info["BB_HIGH"] = Nifty.stock_bollinger_bands(symbol)[0]
-        # stock_info["BB_AVG"] = Nifty.stock_bollinger_bands(symbol)[1]
-        # stock_info["BB_LOW"] = Nifty.stock_bollinger_bands(symbol)[2]
-        # stock_info["%K"] = Nifty.stock_stochastic(symbol)[0]
-        # stock_info["%D"] = Nifty.stock_stochastic(symbol)[1]
         if (
                 stock_info["RSI"] >= 70
                 and stock_info["ADX"] >= 25
