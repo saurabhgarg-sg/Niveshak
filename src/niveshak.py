@@ -33,8 +33,7 @@ class Niveshak:
 
     def show_watchlist_info(self):
         """display the information about all the symbols in the list."""
-        nse = Nifty()
-        st.write(nse.show_list_info(stock_list=self.list_symbols))
+        st.write((Nifty().show_list_info(stock_list=self.list_symbols)))
 
     def display_welcome_page(self) -> None:
         """Show the main page to start the scanners."""

@@ -3,6 +3,7 @@ import sys
 from pprint import pformat
 
 import pandas as pd
+import pyinstrument
 import streamlit as st
 import talib
 from nsepython import nse_eq, equity_history
@@ -70,6 +71,7 @@ class Nifty:
         historical_data.sort_values(by=NSE.HISTCOL_SORTER, ascending=True, inplace=True)
         return historical_data
 
+    @pyinstrument.profile()
     def show_list_info(self, stock_list: list):
         """display the stock information for each of the list element."""
         # Configure progress bar to display.
@@ -142,16 +144,12 @@ class Nifty:
     def guess_trade_signal(stock_info):
         signal = "Weak Trend"
         adx = stock_info["ADX"] >= 25
-        stoch_breach = (
-                abs(Utils.percetage_diff(stock_info["%K"], stock_info["%D"])) <= 1.0
+        stoch_breach = Utils.percetage_diff(stock_info["%K"], stock_info["%D"])
+        bb_high_breach = Utils.percetage_diff(
+            stock_info["LAST_PRICE"], stock_info["BB_LOW"]
         )
-        bb_high_breach = (
-                abs(Utils.percetage_diff(stock_info["LAST_PRICE"], stock_info["BB_LOW"]))
-                <= 1.0
-        )
-        bb_low_breach = (
-                abs(Utils.percetage_diff(stock_info["LAST_PRICE"], stock_info["BB_LOW"]))
-                <= 1.0
+        bb_low_breach = Utils.percetage_diff(
+            stock_info["LAST_PRICE"], stock_info["BB_LOW"]
         )
 
         """

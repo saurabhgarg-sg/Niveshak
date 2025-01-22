@@ -15,7 +15,7 @@ class Utils:
     def get_lookback_date(delta=int(NSE.LOOKBACK_DAYS)):
         """return the start date for the historical data."""
         diff = datetime.datetime.now() - datetime.timedelta(delta)
-        return Utils.get_ist_date(diff)
+        return Utils.get_ist_date(dateval=diff)
 
     @staticmethod
     def percetage_diff(price, indicator):
