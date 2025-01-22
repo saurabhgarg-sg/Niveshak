@@ -36,5 +36,10 @@ class NSE(StrEnum):
 
     # Indicator settings.
     DEFAULT_TIMEPERIOD = "14"
-    BBAND_TIMEPERIOD = "20"
-    BBAND_DEVIATION = "2"
+
+
+class SYMBOLS:
+    """unicode symbols for display."""
+
+    DELTA = "\u0394"
+    INR = "\u20B9"

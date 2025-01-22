@@ -43,8 +43,10 @@ class Nifty:
             stock_info["BB_LOW"] = Nifty.stock_bollinger_bands(symbol, data)[2]
             stock_info["%K"] = Nifty.stock_stochastic(symbol, data)[0]
             stock_info["%D"] = Nifty.stock_stochastic(symbol, data)[1]
+            stock_info["20-EMA"] = Nifty.stock_ema(symbol, data)
 
             # Deduce signal for trade.
+            stock_info["Δ EMA"] = Nifty.stock_ema_delta(stock_info)
             stock_info["SIGNAL"] = Nifty.guess_trade_signal(stock_info)
 
         logging.debug(pformat(stock_info))
@@ -94,10 +96,7 @@ class Nifty:
     @staticmethod
     @st.cache_data
     def stock_bollinger_bands(symbol, data):
-        bband_data = talib.BBANDS(
-            data[NSE.HISTCOL_CLOSE],
-            int(NSE.BBAND_TIMEPERIOD),
-        )
+        bband_data = talib.BBANDS(data[NSE.HISTCOL_CLOSE], 20)
         return [round(float(bb_data.iloc[-1]), 2) for bb_data in bband_data]
 
     @staticmethod
@@ -114,15 +113,29 @@ class Nifty:
     @staticmethod
     @st.cache_data
     def stock_stochastic(symbol, data):
+        # Use the values for Stochastic Oscillator 10,3,3 for aggressive short term swing trading.
         # Use the values for Stochastic Oscillator 21,5,5 for conservative medium term swing trading.
         stoch_data = talib.STOCHF(
             high=data[NSE.HISTCOL_HIGH],
             low=data[NSE.HISTCOL_LOW],
             close=data[NSE.HISTCOL_CLOSE],
-            fastk_period=21,
-            fastd_period=5,
+            fastk_period=10,
+            fastd_period=3,
         )
         return [round(float(st_data.iloc[-1]), 2) for st_data in stoch_data]
+
+    @staticmethod
+    @st.cache_data
+    def stock_ema(symbol, data):
+        ema_data = talib.EMA(data[NSE.HISTCOL_CLOSE], timeperiod=20)
+        return round(float(ema_data.iloc[-1]), 2)
+
+    @staticmethod
+    @st.cache_data
+    def stock_ema_delta(stock_info):
+        diff = stock_info[InfoKeys.LAST_PRICE.name] - stock_info["20-EMA"]
+        diffp = (diff * 100) / stock_info["20-EMA"]
+        return round(diffp, 2)
 
     @staticmethod
     @st.cache_data
