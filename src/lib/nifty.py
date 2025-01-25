@@ -21,16 +21,20 @@ class Nifty:
     @staticmethod
     def get_stock_info(symbol: str):
         """fetch individual stock information."""
-        raw_info = nse_eq(symbol)
-        assert raw_info, f"failed to get info on '{symbol}'."
-        logging.debug(pformat(raw_info))
-
         stock_info = {"SYMBOL": symbol}
+        raw_info = nse_eq(symbol)
+        if raw_info and raw_info.get("info"):
+            logging.debug(pformat(raw_info))
+        else:
+            logging.error(f"failed to get info on '{symbol}'.")
+            return stock_info
+
+        logging.info(f"fetching information on '{stock_info["SYMBOL"]}'.")
         for infokey in InfoKeys:
             # construct the key to fetch the value.
             infoval = raw_info
             for key in infokey.value:
-                infoval = infoval[key]
+                infoval = infoval.get(key)
             stock_info[infokey.name] = infoval
 
         data = Nifty.get_historical_data(symbol)
@@ -72,7 +76,7 @@ class Nifty:
     @pyinstrument.profile()
     def show_list_info(self, stock_list: list):
         """display the stock information for each of the list element."""
-        with concurrent.futures.ThreadPoolExecutor(max_workers=25) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
             results = executor.map(self.get_stock_info, stock_list, timeout=120)
 
         data = list(results)
