@@ -14,6 +14,7 @@ class Watchlists:
 
     def __init__(self):
         self.watchlists = {}
+        self.exclude_list = ".DS_Store"
 
     @staticmethod
     def read_symbols(path) -> list:
@@ -26,6 +27,7 @@ class Watchlists:
     def get_all(self):
         """Get all the watchlists."""
         for entry in os.scandir(DataFiles.WATCHLISTS):
-            if entry.is_file():
+            if entry.is_file() and entry.name not in self.exclude_list:
+                logging.info(f"reading {entry.name}")
                 self.watchlists[entry.name] = self.read_symbols(entry.path)
         logging.debug(pformat(self.watchlists))
