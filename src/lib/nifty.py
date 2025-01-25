@@ -1,3 +1,4 @@
+import concurrent.futures
 import logging
 import sys
 from pprint import pformat
@@ -74,17 +75,10 @@ class Nifty:
     @pyinstrument.profile()
     def show_list_info(self, stock_list: list):
         """display the stock information for each of the list element."""
-        # Configure progress bar to display.
-        progress = 0
-        bar = st.progress(progress)
-        counter = 1 / len(stock_list)
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            results = executor.map(self.get_stock_info, stock_list, timeout=120)
 
-        # Fetch the quotes for each stock in the watchlist.
-        data = []
-        for stock in stock_list:
-            progress += counter
-            bar.progress(progress)
-            data.append(self.get_stock_info(stock))
+        data = list(results)
         logging.debug(pformat(data))
 
         return pd.DataFrame(data)
