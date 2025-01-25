@@ -5,7 +5,6 @@ from pprint import pformat
 
 import pandas as pd
 import pyinstrument
-import streamlit as st
 import talib
 from nsepython import nse_eq, equity_history
 
@@ -20,7 +19,6 @@ class Nifty:
     """Implements all the NSE related ops."""
 
     @staticmethod
-    @st.cache_data
     def get_stock_info(symbol: str):
         """fetch individual stock information."""
         raw_info = nse_eq(symbol)
@@ -55,7 +53,6 @@ class Nifty:
         return stock_info
 
     @staticmethod
-    @st.cache_data
     def get_historical_data(symbol: str):
         """get historical data for any stock."""
         historical_data = equity_history(
@@ -75,7 +72,7 @@ class Nifty:
     @pyinstrument.profile()
     def show_list_info(self, stock_list: list):
         """display the stock information for each of the list element."""
-        with concurrent.futures.ThreadPoolExecutor() as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=25) as executor:
             results = executor.map(self.get_stock_info, stock_list, timeout=120)
 
         data = list(results)
@@ -84,19 +81,16 @@ class Nifty:
         return pd.DataFrame(data)
 
     @staticmethod
-    @st.cache_data
     def stock_rsi(symbol, data):
         rsi_data = talib.RSI(data[NSE.HISTCOL_CLOSE], int(NSE.DEFAULT_TIMEPERIOD))
         return round(float(rsi_data.iloc[-1]), 2)
 
     @staticmethod
-    @st.cache_data
     def stock_bollinger_bands(symbol, data):
         bband_data = talib.BBANDS(data[NSE.HISTCOL_CLOSE], 20)
         return [round(float(bb_data.iloc[-1]), 2) for bb_data in bband_data]
 
     @staticmethod
-    @st.cache_data
     def stock_adx(symbol, data):
         adx_data = talib.ADX(
             high=data[NSE.HISTCOL_HIGH],
@@ -107,7 +101,6 @@ class Nifty:
         return round(float(adx_data.iloc[-1]), 2)
 
     @staticmethod
-    @st.cache_data
     def stock_stochastic(symbol, data):
         # Use the values for Stochastic Oscillator 10,3,3 for aggressive short term swing trading.
         # Use the values for Stochastic Oscillator 21,5,5 for conservative medium term swing trading.
@@ -121,20 +114,17 @@ class Nifty:
         return [round(float(st_data.iloc[-1]), 2) for st_data in stoch_data]
 
     @staticmethod
-    @st.cache_data
     def stock_ema(symbol, data):
         ema_data = talib.EMA(data[NSE.HISTCOL_CLOSE], timeperiod=20)
         return round(float(ema_data.iloc[-1]), 2)
 
     @staticmethod
-    @st.cache_data
     def stock_ema_delta(stock_info):
         diff = stock_info[InfoKeys.LAST_PRICE.name] - stock_info["20-EMA"]
         diffp = (diff * 100) / stock_info["20-EMA"]
         return round(diffp, 2)
 
     @staticmethod
-    @st.cache_data
     def guess_trade_signal(stock_info):
         signal = "Weak Trend"
         adx = stock_info["ADX"] >= 25
