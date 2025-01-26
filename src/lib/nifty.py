@@ -146,31 +146,43 @@ class Nifty:
         return round(diff_percentage, 2)
 
     @staticmethod
+    def find_adx_strength(adx_value):
+        """return value of ADX strength."""
+        if 0 < adx_value <= 25:
+            logging.info("ADX: Weak Trend")
+            adx_strength = 0
+        elif 25 < adx_value <= 50:
+            logging.info("ADX: Strong Trend")
+            adx_strength = 1
+        elif 50 < adx_value <= 75:
+            logging.info("ADX: Very Strong Trend")
+            adx_strength = 2
+        elif 75 < adx_value <= 100:
+            logging.info("ADX: Extremely Strong Trend")
+            adx_strength = 3
+
+        return adx_strength
+
+    @staticmethod
     def guess_trade_signal(stock_info):
-        signal = None
+        signal_strength = 0
+        signal_strength += Nifty.find_adx_strength(stock_info[InfoKeys.ADX])
         stoch_strength = Utils.percetage_diff(
             stock_info[InfoKeys.STOCH_K], stock_info[InfoKeys.STOCH_D]
         )
         bb_high_strength = Utils.percetage_diff(
             stock_info[InfoKeys.LAST_PRICE.name], stock_info[InfoKeys.BB_HIGH]
         )
+        bb_avg_strength = Utils.percetage_diff(
+            stock_info[InfoKeys.LAST_PRICE.name], stock_info[InfoKeys.BB_AVG]
+        )
         bb_low_strength = Utils.percetage_diff(
             stock_info[InfoKeys.LAST_PRICE.name], stock_info[InfoKeys.BB_LOW]
         )
-
         """
             1. Determine trend strength based on ADX value
             2. Stochastic Oscillator intersection indicates trend reversal
             3. Proximity to BB high and low values show potential reversal
             4. Favourable RSI value indicates strong trend
         """
-        if 0 < stock_info[InfoKeys.ADX] <= 25:
-            signal = "Weak Trend"
-        elif 25 < stock_info[InfoKeys.ADX] <= 50:
-            signal = "Strong Trend"
-        elif 50 < stock_info[InfoKeys.ADX] <= 75:
-            signal = "Very Strong Trend"
-        elif 75 < stock_info[InfoKeys.ADX] <= 100:
-            signal = "Extremely Strong Trend"
-
-        return signal
+        return signal_strength
