@@ -66,19 +66,6 @@ class Nifty:
         logging.debug(pformat(self.stock_info))
         return self.stock_info
 
-    # @pyinstrument.profile()
-    # def show_list_info(self, stock_list: list):
-    #     """display the stock information for each of the list element."""
-    #     with concurrent.futures.ProcessPoolExecutor(
-    #         max_workers=Configuration.CONCURRENCY
-    #     ) as executor:
-    #         results = executor.map(self.get_stock_info, stock_list, timeout=120)
-    #
-    #     data = list(results)
-    #     logging.debug(pformat(data))
-    #
-    #     return pd.DataFrame(data)
-
     def stock_rsi(self):
         rsi_data = talib.RSI(
             self.stock_history[NSE.HISTCOL_CLOSE], int(NSE.DEFAULT_TIMEPERIOD)
