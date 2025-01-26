@@ -5,11 +5,13 @@ from pprint import pformat
 
 import pandas as pd
 import pyinstrument
+import requests
+import streamlit as st
 import talib
 from nsepython import nse_eq, equity_history
 
 from constants.config import Configuration
-from constants.stocks import InfoKeys, NSE
+from constants.stocks import RawInfoKeys, NSE, InfoKeys
 from lib.utils import Utils
 
 logging.basicConfig(stream=sys.stdout, level=Configuration.LOG_LEVEL)
@@ -19,10 +21,17 @@ class Nifty:
     """Implements all the NSE related ops."""
 
     @staticmethod
+    @st.cache_data
     def get_stock_info(symbol: str):
         """fetch individual stock information."""
         stock_info = {"SYMBOL": symbol}
-        raw_info = nse_eq(symbol)
+        try:
+            raw_info = nse_eq(symbol)
+        except requests.exceptions.JSONDecodeError as jerr:
+            logging.error(f"failed to get stock into for '{symbol}'.")
+            logging.error(str(jerr))
+            return stock_info
+
         if raw_info and raw_info.get("info"):
             logging.debug(pformat(raw_info))
         else:
@@ -30,24 +39,26 @@ class Nifty:
             return stock_info
 
         logging.info(f"fetching information on '{stock_info["SYMBOL"]}'.")
-        for infokey in InfoKeys:
+        for infokey in RawInfoKeys:
             # construct the key to fetch the value.
             infoval = raw_info
             for key in infokey.value:
                 infoval = infoval.get(key)
+                if not infoval:
+                    break
             stock_info[infokey.name] = infoval
 
         data = Nifty.get_historical_data(symbol)
-        if not data.empty:
+        if len(data) != 0 and not data.empty:
             # Add the calculated indicators.
-            stock_info["RSI"] = Nifty.stock_rsi(symbol, data)
-            stock_info["ADX"] = Nifty.stock_adx(symbol, data)
-            stock_info["BB_HIGH"] = Nifty.stock_bollinger_bands(symbol, data)[0]
-            stock_info["BB_AVG"] = Nifty.stock_bollinger_bands(symbol, data)[1]
-            stock_info["BB_LOW"] = Nifty.stock_bollinger_bands(symbol, data)[2]
-            stock_info["%K"] = Nifty.stock_stochastic(symbol, data)[0]
-            stock_info["%D"] = Nifty.stock_stochastic(symbol, data)[1]
-            stock_info["20-EMA"] = Nifty.stock_ema(symbol, data)
+            stock_info[InfoKeys.RSI] = Nifty.stock_rsi(symbol, data)
+            stock_info[InfoKeys.ADX] = Nifty.stock_adx(symbol, data)
+            stock_info[InfoKeys.BB_HIGH] = Nifty.stock_bollinger_bands(symbol, data)[0]
+            stock_info[InfoKeys.BB_AVG] = Nifty.stock_bollinger_bands(symbol, data)[1]
+            stock_info[InfoKeys.BB_LOW] = Nifty.stock_bollinger_bands(symbol, data)[2]
+            stock_info[InfoKeys.STOCH_K] = Nifty.stock_stochastic(symbol, data)[0]
+            stock_info[InfoKeys.STOCH_D] = Nifty.stock_stochastic(symbol, data)[1]
+            stock_info[InfoKeys.EMA_20] = Nifty.stock_ema(symbol, data)
 
             # Deduce signal for trade.
             stock_info["Δ EMA"] = Nifty.stock_ema_delta(stock_info)
@@ -57,18 +68,24 @@ class Nifty:
         return stock_info
 
     @staticmethod
+    @st.cache_data
     def get_historical_data(symbol: str):
         """get historical data for any stock."""
-        historical_data = equity_history(
-            symbol=symbol,
-            series=NSE.STOCK_CODE,
-            start_date=Utils.get_lookback_date(),
-            end_date=Utils.get_ist_date(),
-        )
+        try:
+            historical_data = equity_history(
+                symbol=symbol,
+                series=NSE.STOCK_CODE,
+                start_date=Utils.get_lookback_date(),
+                end_date=Utils.get_ist_date(),
+            )
+        except requests.exceptions.JSONDecodeError as jerr:
+            logging.error(f"failed to get any response for '{symbol}'.")
+            logging.error(str(jerr))
+            return {}
 
         if historical_data.empty:
             logging.error(f"failed to get any data, check the symbol '{symbol}'.")
-            return historical_data
+            return {}
 
         historical_data.sort_values(by=NSE.HISTCOL_SORTER, ascending=True, inplace=True)
         return historical_data
@@ -124,45 +141,36 @@ class Nifty:
 
     @staticmethod
     def stock_ema_delta(stock_info):
-        diff = stock_info[InfoKeys.LAST_PRICE.name] - stock_info["20-EMA"]
-        diffp = (diff * 100) / stock_info["20-EMA"]
-        return round(diffp, 2)
+        diff = stock_info[InfoKeys.LAST_PRICE] - stock_info[InfoKeys.EMA_20]
+        diff_percentage = (diff * 100) / stock_info[InfoKeys.EMA_20]
+        return round(diff_percentage, 2)
 
     @staticmethod
     def guess_trade_signal(stock_info):
-        signal = "Weak Trend"
-        adx = stock_info["ADX"] >= 25
-        stoch_breach = Utils.percetage_diff(stock_info["%K"], stock_info["%D"])
-        bb_high_breach = Utils.percetage_diff(
-            stock_info["LAST_PRICE"], stock_info["BB_LOW"]
+        signal = None
+        stoch_strength = Utils.percetage_diff(
+            stock_info[InfoKeys.STOCH_K], stock_info[InfoKeys.STOCH_D]
         )
-        bb_low_breach = Utils.percetage_diff(
-            stock_info["LAST_PRICE"], stock_info["BB_LOW"]
+        bb_high_strength = Utils.percetage_diff(
+            stock_info[InfoKeys.LAST_PRICE.name], stock_info[InfoKeys.BB_HIGH]
+        )
+        bb_low_strength = Utils.percetage_diff(
+            stock_info[InfoKeys.LAST_PRICE.name], stock_info[InfoKeys.BB_LOW]
         )
 
         """
-            1. No trend with ADX < 25.0
+            1. Determine trend strength based on ADX value
             2. Stochastic Oscillator intersection indicates trend reversal
             3. Proximity to BB high and low values show potential reversal
             4. Favourable RSI value indicates strong trend
         """
-        if adx:
-            if bb_high_breach:
-                if stoch_breach:
-                    if stock_info["RSI"] <= 30:
-                        signal = "Strong BUY"
-                    else:
-                        signal = "Breakout BUY"
-                else:
-                    signal = "Continued Uptrend"
-
-            if bb_high_breach:
-                if stoch_breach:
-                    if stock_info["RSI"] >= 70:
-                        signal = "Strong SELL"
-                    else:
-                        signal = "Breakout SELL"
-                else:
-                    signal = "Continued Downtrend"
+        if 0 < stock_info[InfoKeys.ADX] <= 25:
+            signal = "Weak Trend"
+        elif 25 < stock_info[InfoKeys.ADX] <= 50:
+            signal = "Strong Trend"
+        elif 50 < stock_info[InfoKeys.ADX] <= 75:
+            signal = "Very Strong Trend"
+        elif 75 < stock_info[InfoKeys.ADX] <= 100:
+            signal = "Extremely Strong Trend"
 
         return signal

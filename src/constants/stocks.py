@@ -1,7 +1,7 @@
 from enum import Enum, StrEnum
 
 
-class InfoKeys(Enum):
+class RawInfoKeys(Enum):
     """List of all the keys of interest from Nifty stock data.`"""
 
     """Informational"""
@@ -21,6 +21,20 @@ class InfoKeys(Enum):
     LOWER_CKT = ["priceInfo", "lowerCP"]
 
 
+class InfoKeys(StrEnum):
+    """Keys for parsed information."""
+
+    LAST_PRICE = "LAST_PRICE"
+    ADX = "ADX"
+    BB_HIGH = "BB_HIGH"
+    BB_AVG = "BB_MID"
+    BB_LOW = "BB_LOW"
+    EMA_20 = "20-EMA"
+    RSI = "RSI"
+    STOCH_K = "%K"
+    STOCH_D = "%D"
+
+
 class NSE(StrEnum):
     """NSE stock related constants."""
 
@@ -36,10 +50,3 @@ class NSE(StrEnum):
 
     # Indicator settings.
     DEFAULT_TIMEPERIOD = "14"
-
-
-class SYMBOLS:
-    """unicode symbols for display."""
-
-    DELTA = "\u0394"
-    INR = "\u20B9"
