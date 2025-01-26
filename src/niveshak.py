@@ -1,6 +1,10 @@
+import concurrent.futures
 import logging
 import sys
+from pprint import pformat
 
+import pandas as pd
+import pyinstrument
 import streamlit as st
 
 from constants.config import Configuration
@@ -29,11 +33,24 @@ class Niveshak:
         st.write("displaying watchlist: ", self.list_name)
         if self.list_name:
             self.list_symbols = wl.watchlists[self.list_name]
-            self.show_watchlist_info()
+            st.write(self.show_list_info())
 
-    def show_watchlist_info(self):
-        """display the information about all the symbols in the list."""
-        st.write((Nifty().show_list_info(stock_list=self.list_symbols)))
+    @pyinstrument.profile()
+    def show_list_info(self):
+        """display the stock information for each of the list element."""
+        with concurrent.futures.ProcessPoolExecutor(
+                max_workers=Configuration.CONCURRENCY
+        ) as executor:
+            results = executor.map(
+                Nifty().get_stock_info,
+                self.list_symbols,
+                timeout=Configuration.LIVE_DATA_TIMEOUT,
+            )
+
+        data = list(results)
+        logging.debug(pformat(data))
+
+        return pd.DataFrame(data)
 
     def display_welcome_page(self) -> None:
         """Show the main page to start the scanners."""
