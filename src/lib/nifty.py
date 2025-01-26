@@ -61,7 +61,8 @@ class Nifty:
 
             # Deduce signal for trade.
             self.stock_info[InfoKeys.EMA_DELTA] = self.stock_ema_delta()
-            self.stock_info[InfoKeys.SIGNAL] = self.guess_trade_signal()
+            self.guess_trade_signal()
+            # self.stock_info[InfoKeys.SIGNAL] = self.guess_trade_signal()
 
         logging.debug(pformat(self.stock_info))
         return self.stock_info
@@ -102,59 +103,66 @@ class Nifty:
         return round(float(ema_data.iloc[-1]), 2)
 
     def stock_ema_delta(self):
-        diff = self.stock_info[InfoKeys.LAST_PRICE] - self.stock_info[InfoKeys.EMA_20]
-        diff_percentage = (diff * 100) / self.stock_info[InfoKeys.EMA_20]
-        return round(diff_percentage, 2)
+        return Utils.percentage_diff(
+            self.stock_info[InfoKeys.EMA_20], self.stock_info[InfoKeys.LAST_PRICE]
+        )
 
     def find_adx_strength(self):
         """return value of ADX strength."""
         adx_strength = 0
+        msg = (
+            f"{self.stock_info[InfoKeys.SYMBOL]} ADX({self.stock_info[InfoKeys.ADX]}): "
+        )
         if 0 < self.stock_info[InfoKeys.ADX] <= 25:
-            logging.info("ADX: Weak Trend")
+            msg += "Weak Trend"
         elif 25 < self.stock_info[InfoKeys.ADX] <= 50:
-            logging.info("ADX: Strong Trend")
+            msg += "Strong Trend"
             adx_strength = 1
         elif 50 < self.stock_info[InfoKeys.ADX] <= 75:
-            logging.info("ADX: Very Strong Trend")
+            msg += "Very Strong Trend"
             adx_strength = 2
         elif 75 < self.stock_info[InfoKeys.ADX] <= 100:
-            logging.info("ADX: Extremely Strong Trend")
+            msg += "Extremely Strong Trend"
             adx_strength = 3
 
+        logging.info(msg)
         return adx_strength
 
     def find_stoch_strength(self):
         """return value of Stochastic strength."""
         stoch_strength = 0
-        stoch_diff = Utils.percetage_diff(
-            self.stock_info[InfoKeys.STOCH_K], self.stock_info[InfoKeys.STOCH_K]
+        stoch_diff = Utils.percentage_diff(
+            self.stock_info[InfoKeys.STOCH_D], self.stock_info[InfoKeys.STOCH_K]
         )
-        logging.info(f"")
-        if 0 < stoch_diff <= 25:
-            logging.info("stoch: Weak Trend")
-        elif 25 < stoch_diff <= 50:
-            logging.info("stoch: Strong Trend")
-            stoch_strength = 1
-        elif 50 < stoch_diff <= 75:
-            logging.info("stoch: Very Strong Trend")
-            stoch_strength = 2
-        elif 75 < stoch_diff <= 100:
-            logging.info("stoch: Extremely Strong Trend")
-            stoch_strength = 3
+        msg = f"{self.stock_info[InfoKeys.SYMBOL]} Stochastic({stoch_diff}): "
+        if 0 < stoch_diff <= 7.5:
+            msg += "Breakout Sell"
+        elif 7.5 < stoch_diff <= 80:
+            msg += "Continued Downtrend"
+        elif 80 < stoch_diff <= 100:
+            msg += "Reversal Buy"
+        elif 0 > stoch_diff >= -7.5:
+            msg += "Breakout Buy"
+        elif -7.5 > stoch_diff >= -80:
+            msg += "Continued Uptrend"
+        elif -80 > stoch_diff >= -100:
+            msg += "Reversal Sell"
 
+        logging.info(msg)
+        self.stock_info[InfoKeys.SIGNAL] = msg
         return stoch_strength
 
     def guess_trade_signal(self):
         signal_strength = 0
         signal_strength += self.find_adx_strength()
         signal_strength += self.find_stoch_strength()
-        bb_high_strength = Utils.percetage_diff(
+        bb_high_strength = Utils.percentage_diff(
             self.stock_info[InfoKeys.LAST_PRICE.name], self.stock_info[InfoKeys.BB_HIGH]
         )
-        bb_avg_strength = Utils.percetage_diff(
+        bb_avg_strength = Utils.percentage_diff(
             self.stock_info[InfoKeys.LAST_PRICE.name], self.stock_info[InfoKeys.BB_AVG]
         )
-        bb_low_strength = Utils.percetage_diff(
+        bb_low_strength = Utils.percentage_diff(
             self.stock_info[InfoKeys.LAST_PRICE.name], self.stock_info[InfoKeys.BB_LOW]
         )
         """

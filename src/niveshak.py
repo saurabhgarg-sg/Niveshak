@@ -49,7 +49,6 @@ class Niveshak:
 
         data = list(results)
         logging.debug(pformat(data))
-
         return pd.DataFrame(data)
 
     def display_welcome_page(self) -> None:
@@ -58,4 +57,5 @@ class Niveshak:
         logging.debug(f"fetching information on the stocks for '{self.list_name}'.")
 
 
-Niveshak().display_welcome_page()
+if __name__ == "__main__":
+    Niveshak().display_welcome_page()

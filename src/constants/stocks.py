@@ -35,6 +35,7 @@ class InfoKeys(StrEnum):
     SIGNAL = "SIGNAL"
     STOCH_K = "%K"
     STOCH_D = "%D"
+    STOCH_DELTA = "Δ STOCH"
     SYMBOL = "SYMBOL"
 
 

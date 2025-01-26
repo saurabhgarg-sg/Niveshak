@@ -18,6 +18,6 @@ class Utils:
         return Utils.get_ist_date(dateval=diff)
 
     @staticmethod
-    def percetage_diff(price, indicator):
-        """calculate the percentage difference between indicator and stock price."""
-        return round((indicator - price) * 100 / price, 2)
+    def percentage_diff(a, b):
+        """calculate the percentage difference between b and a."""
+        return round((a - b) * 100 / a, 2)
