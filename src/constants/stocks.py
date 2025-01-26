@@ -24,15 +24,16 @@ class RawInfoKeys(Enum):
 class InfoKeys(StrEnum):
     """Keys for parsed information."""
 
-    LAST_PRICE = "LAST_PRICE"
     ADX = "ADX"
     BB_HIGH = "BB_HIGH"
     BB_AVG = "BB_MID"
     BB_LOW = "BB_LOW"
     EMA_20 = "20-EMA"
+    LAST_PRICE = "LAST_PRICE"
     RSI = "RSI"
     STOCH_K = "%K"
     STOCH_D = "%D"
+    SYMBOL = "SYMBOL"
 
 
 class NSE(StrEnum):

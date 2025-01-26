@@ -6,12 +6,11 @@ from pprint import pformat
 import pandas as pd
 import pyinstrument
 import requests
-import streamlit as st
 import talib
-from nsepython import nse_eq, equity_history
 
 from constants.config import Configuration
 from constants.stocks import RawInfoKeys, NSE, InfoKeys
+from lib.nifty_live import NiftyLive
 from lib.utils import Utils
 
 logging.basicConfig(stream=sys.stdout, level=Configuration.LOG_LEVEL)
@@ -21,12 +20,11 @@ class Nifty:
     """Implements all the NSE related ops."""
 
     @staticmethod
-    @st.cache_data
     def get_stock_info(symbol: str):
         """fetch individual stock information."""
-        stock_info = {"SYMBOL": symbol}
+        stock_info = {InfoKeys.SYMBOL: symbol}
         try:
-            raw_info = nse_eq(symbol)
+            raw_info = NiftyLive.get_stock_quotes(stock_info[InfoKeys.SYMBOL])
         except requests.exceptions.JSONDecodeError as jerr:
             logging.error(f"failed to get stock into for '{symbol}'.")
             logging.error(str(jerr))
@@ -48,7 +46,7 @@ class Nifty:
                     break
             stock_info[infokey.name] = infoval
 
-        data = Nifty.get_historical_data(symbol)
+        data = NiftyLive.get_historical_data(stock_info[InfoKeys.SYMBOL])
         if len(data) != 0 and not data.empty:
             # Add the calculated indicators.
             stock_info[InfoKeys.RSI] = Nifty.stock_rsi(symbol, data)
@@ -66,29 +64,6 @@ class Nifty:
 
         logging.debug(pformat(stock_info))
         return stock_info
-
-    @staticmethod
-    @st.cache_data
-    def get_historical_data(symbol: str):
-        """get historical data for any stock."""
-        try:
-            historical_data = equity_history(
-                symbol=symbol,
-                series=NSE.STOCK_CODE,
-                start_date=Utils.get_lookback_date(),
-                end_date=Utils.get_ist_date(),
-            )
-        except requests.exceptions.JSONDecodeError as jerr:
-            logging.error(f"failed to get any response for '{symbol}'.")
-            logging.error(str(jerr))
-            return {}
-
-        if historical_data.empty:
-            logging.error(f"failed to get any data, check the symbol '{symbol}'.")
-            return {}
-
-        historical_data.sort_values(by=NSE.HISTCOL_SORTER, ascending=True, inplace=True)
-        return historical_data
 
     @pyinstrument.profile()
     def show_list_info(self, stock_list: list):
@@ -148,9 +123,9 @@ class Nifty:
     @staticmethod
     def find_adx_strength(adx_value):
         """return value of ADX strength."""
+        adx_strength = 0
         if 0 < adx_value <= 25:
             logging.info("ADX: Weak Trend")
-            adx_strength = 0
         elif 25 < adx_value <= 50:
             logging.info("ADX: Strong Trend")
             adx_strength = 1
@@ -164,10 +139,30 @@ class Nifty:
         return adx_strength
 
     @staticmethod
+    def find_stoch_strength(k_value, d_value):
+        """return value of Stochastic strength."""
+        stoch_strength = 0
+        stoch_diff = Utils.percetage_diff(k_value, d_value)
+        logging.info(f"")
+        if 0 < stoch_diff <= 25:
+            logging.info("stoch: Weak Trend")
+        elif 25 < stoch_diff <= 50:
+            logging.info("stoch: Strong Trend")
+            stoch_strength = 1
+        elif 50 < stoch_diff <= 75:
+            logging.info("stoch: Very Strong Trend")
+            stoch_strength = 2
+        elif 75 < stoch_diff <= 100:
+            logging.info("stoch: Extremely Strong Trend")
+            stoch_strength = 3
+
+        return stoch_strength
+
+    @staticmethod
     def guess_trade_signal(stock_info):
         signal_strength = 0
         signal_strength += Nifty.find_adx_strength(stock_info[InfoKeys.ADX])
-        stoch_strength = Utils.percetage_diff(
+        signal_strength += Nifty.find_stoch_strength(
             stock_info[InfoKeys.STOCH_K], stock_info[InfoKeys.STOCH_D]
         )
         bb_high_strength = Utils.percetage_diff(
