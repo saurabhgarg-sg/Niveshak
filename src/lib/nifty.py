@@ -134,8 +134,8 @@ class Nifty:
         if -7.5 <= stoch_diff <= 7.5:
             msg = "Breakout"
         elif (
-                self.stock_info[InfoKeys.STOCH_K] > 80
-                or self.stock_info[InfoKeys.STOCH_K] < 20
+            self.stock_info[InfoKeys.STOCH_K] > 80
+            or self.stock_info[InfoKeys.STOCH_K] < 20
         ):
             msg = "Reversal"
         elif 20 < self.stock_info[InfoKeys.STOCH_K] < 80:
