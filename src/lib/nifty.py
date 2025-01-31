@@ -106,7 +106,7 @@ class Nifty:
             self.stock_info[InfoKeys.EMA_20], self.stock_info[InfoKeys.LAST_PRICE]
         )
 
-    def find_adx_strength(self):
+    def find_adx_trend(self):
         """return value of ADX strength."""
         adx_strength = 0
         msg = ""
@@ -125,15 +125,18 @@ class Nifty:
         self.stock_info[InfoKeys.SIGNAL] = msg
         return adx_strength
 
-    def find_stoch_strength(self):
+    def find_stoch_trend(self):
         """return value of Stochastic strength."""
+        msg = ""
         stoch_diff = Utils.percentage_diff(
             self.stock_info[InfoKeys.STOCH_D], self.stock_info[InfoKeys.STOCH_K]
         )
         if -7.5 <= stoch_diff <= 7.5:
             msg = "Breakout"
-        elif self.stock_info[InfoKeys.STOCH_K] > 80 \
-                or self.stock_info[InfoKeys.STOCH_K] < 20:
+        elif (
+                self.stock_info[InfoKeys.STOCH_K] > 80
+                or self.stock_info[InfoKeys.STOCH_K] < 20
+        ):
             msg = "Reversal"
         elif 20 < self.stock_info[InfoKeys.STOCH_K] < 80:
             if stoch_diff < -7.5:
@@ -143,6 +146,19 @@ class Nifty:
 
         self.stock_info[InfoKeys.SIGNAL] += f" {msg}"
 
+    def find_bb_trend(self):
+        """return Bollinger band signal"""
+        msg = ""
+
+        if self.stock_info[InfoKeys.LAST_PRICE] > self.stock_info[InfoKeys.BB_HIGH]:
+            msg = "Sell"
+        elif self.stock_info[InfoKeys.LAST_PRICE] < self.stock_info[InfoKeys.BB_LOW]:
+            msg = "Buy"
+        else:
+            msg = "."
+        self.stock_info[InfoKeys.SIGNAL] += f" {msg}"
+
     def guess_trade_signal(self):
-        self.find_adx_strength()
-        self.find_stoch_strength()
+        self.find_adx_trend()
+        self.find_stoch_trend()
+        self.find_bb_trend()

@@ -39,7 +39,7 @@ class Niveshak:
     def show_list_info(self):
         """display the stock information for each of the list element."""
         with concurrent.futures.ProcessPoolExecutor(
-                max_workers=Configuration.CONCURRENCY
+            max_workers=Configuration.CONCURRENCY
         ) as executor:
             results = executor.map(
                 Nifty().get_stock_info,
