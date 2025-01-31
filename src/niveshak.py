@@ -52,31 +52,31 @@ class Niveshak:
         return self.arrange_display_columns(pd.DataFrame(data))
 
     def arrange_display_columns(self, df):
-        return df[
-            [
-                InfoKeys.SYMBOL,
-                InfoKeys.SIGNAL,
-                InfoKeys.EMA_DELTA,
-                InfoKeys.RSI,
-                InfoKeys.ADX,
-                InfoKeys.EMA_20,
-                InfoKeys.STOCH_DELTA,
-                InfoKeys.STOCH_K,
-                InfoKeys.STOCH_D,
-                InfoKeys.BB_HIGH,
-                InfoKeys.BB_AVG,
-                InfoKeys.BB_LOW,
-                InfoKeys.LAST_PRICE,
-                RawInfoKeys.INTRADAY_HIGH.name,
-                RawInfoKeys.INTRADAY_LOW.name,
-                RawInfoKeys.LAST_CLOSE.name,
-                RawInfoKeys.YEAR_HIGH.name,
-                RawInfoKeys.YEAR_LOW.name,
-                RawInfoKeys.INTRADAY_LOW.name,
-                RawInfoKeys.UPPER_CKT.name,
-                RawInfoKeys.LOWER_CKT.name,
-            ]
+        """re-arrange the column display order."""
+        new_order = [
+            InfoKeys.SYMBOL,
+            InfoKeys.SIGNAL,
+            InfoKeys.EMA_DELTA,
+            InfoKeys.RSI,
+            InfoKeys.ADX,
+            InfoKeys.EMA_20,
+            InfoKeys.STOCH_DELTA,
+            InfoKeys.STOCH_K,
+            InfoKeys.STOCH_D,
+            InfoKeys.BB_HIGH,
+            InfoKeys.BB_AVG,
+            InfoKeys.BB_LOW,
+            InfoKeys.LAST_PRICE,
+            RawInfoKeys.INTRADAY_HIGH.name,
+            RawInfoKeys.INTRADAY_LOW.name,
+            RawInfoKeys.LAST_CLOSE.name,
+            RawInfoKeys.YEAR_HIGH.name,
+            RawInfoKeys.YEAR_LOW.name,
+            RawInfoKeys.UPPER_CKT.name,
+            RawInfoKeys.LOWER_CKT.name,
         ]
+
+        return df[new_order]
 
     def display_welcome_page(self) -> None:
         """Show the main page to start the scanners."""

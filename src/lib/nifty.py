@@ -131,6 +131,8 @@ class Nifty:
         stoch_diff = Utils.percentage_diff(
             self.stock_info[InfoKeys.STOCH_D], self.stock_info[InfoKeys.STOCH_K]
         )
+        self.stock_info[InfoKeys.STOCH_DELTA] = f"{stoch_diff}%"
+
         if -7.5 <= stoch_diff <= 7.5:
             msg = "Breakout"
         elif (
