@@ -62,7 +62,6 @@ class Nifty:
             # Deduce signal for trade.
             self.stock_info[InfoKeys.EMA_DELTA] = self.stock_ema_delta()
             self.guess_trade_signal()
-            # self.stock_info[InfoKeys.SIGNAL] = self.guess_trade_signal()
 
         logging.debug(pformat(self.stock_info))
         return self.stock_info
@@ -110,65 +109,40 @@ class Nifty:
     def find_adx_strength(self):
         """return value of ADX strength."""
         adx_strength = 0
-        msg = (
-            f"{self.stock_info[InfoKeys.SYMBOL]} ADX({self.stock_info[InfoKeys.ADX]}): "
-        )
+        msg = ""
         if 0 < self.stock_info[InfoKeys.ADX] <= 25:
-            msg += "Weak Trend"
+            msg = "Weak"
         elif 25 < self.stock_info[InfoKeys.ADX] <= 50:
-            msg += "Strong Trend"
+            msg = "Strong"
             adx_strength = 1
         elif 50 < self.stock_info[InfoKeys.ADX] <= 75:
-            msg += "Very Strong Trend"
+            msg = "Very Strong"
             adx_strength = 2
         elif 75 < self.stock_info[InfoKeys.ADX] <= 100:
-            msg += "Extremely Strong Trend"
+            msg = "Extremely Strong"
             adx_strength = 3
 
-        logging.info(msg)
+        self.stock_info[InfoKeys.SIGNAL] = msg
         return adx_strength
 
     def find_stoch_strength(self):
         """return value of Stochastic strength."""
-        stoch_strength = 0
         stoch_diff = Utils.percentage_diff(
             self.stock_info[InfoKeys.STOCH_D], self.stock_info[InfoKeys.STOCH_K]
         )
-        msg = f"{self.stock_info[InfoKeys.SYMBOL]} Stochastic({stoch_diff}): "
-        if 0 < stoch_diff <= 7.5:
-            msg += "Breakout Sell"
-        elif 7.5 < stoch_diff <= 80:
-            msg += "Continued Downtrend"
-        elif 80 < stoch_diff <= 100:
-            msg += "Reversal Buy"
-        elif 0 > stoch_diff >= -7.5:
-            msg += "Breakout Buy"
-        elif -7.5 > stoch_diff >= -80:
-            msg += "Continued Uptrend"
-        elif -80 > stoch_diff >= -100:
-            msg += "Reversal Sell"
+        if -7.5 <= stoch_diff <= 7.5:
+            msg = "Breakout"
+        elif self.stock_info[InfoKeys.STOCH_K] > 80 \
+                or self.stock_info[InfoKeys.STOCH_K] < 20:
+            msg = "Reversal"
+        elif 20 < self.stock_info[InfoKeys.STOCH_K] < 80:
+            if stoch_diff < -7.5:
+                msg = "Uptrend"
+            else:
+                msg = "Downtrend"
 
-        logging.info(msg)
-        self.stock_info[InfoKeys.SIGNAL] = msg
-        return stoch_strength
+        self.stock_info[InfoKeys.SIGNAL] += f" {msg}"
 
     def guess_trade_signal(self):
-        signal_strength = 0
-        signal_strength += self.find_adx_strength()
-        signal_strength += self.find_stoch_strength()
-        bb_high_strength = Utils.percentage_diff(
-            self.stock_info[InfoKeys.LAST_PRICE.name], self.stock_info[InfoKeys.BB_HIGH]
-        )
-        bb_avg_strength = Utils.percentage_diff(
-            self.stock_info[InfoKeys.LAST_PRICE.name], self.stock_info[InfoKeys.BB_AVG]
-        )
-        bb_low_strength = Utils.percentage_diff(
-            self.stock_info[InfoKeys.LAST_PRICE.name], self.stock_info[InfoKeys.BB_LOW]
-        )
-        """
-            1. Determine trend strength based on ADX value
-            2. Stochastic Oscillator intersection indicates trend reversal
-            3. Proximity to BB high and low values show potential reversal
-            4. Favourable RSI value indicates strong trend
-        """
-        return signal_strength
+        self.find_adx_strength()
+        self.find_stoch_strength()
