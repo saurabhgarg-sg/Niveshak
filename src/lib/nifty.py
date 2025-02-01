@@ -102,7 +102,7 @@ class Nifty:
 
     def stock_ema_delta(self):
         return Utils.percentage_diff(
-            self.stock_info[InfoKeys.EMA_20], self.stock_info[InfoKeys.LAST_PRICE]
+            self.stock_info[InfoKeys.LAST_PRICE], self.stock_info[InfoKeys.EMA_20]
         )
 
     def find_adx_trend(self):
