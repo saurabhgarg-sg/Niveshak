@@ -12,6 +12,7 @@ from nsepython import nse_eq, equity_history
 from constants.config import Configuration
 from constants.stocks import NSE
 from lib.utils import Utils
+from urllib.parse import quote
 
 logging.basicConfig(stream=sys.stdout, level=Configuration.LOG_LEVEL)
 
@@ -22,7 +23,7 @@ class NiftyLive:
     @st.cache_data
     def get_stock_quotes(symbol: str):
         """fetch individual stock information."""
-        return nse_eq(symbol)
+        return nse_eq(quote(symbol, safe=""))
 
     @staticmethod
     @st.cache_data
@@ -30,7 +31,7 @@ class NiftyLive:
         """get historical data for any stock."""
         try:
             historical_data = equity_history(
-                symbol=symbol,
+                symbol=quote(symbol, safe=""),
                 series=NSE.STOCK_CODE,
                 start_date=Utils.get_lookback_date(),
                 end_date=Utils.get_ist_date(),
