@@ -1,4 +1,6 @@
 nsepython
 pandas
+pyinstrument
 streamlit
+ta-lib
 watchdog
