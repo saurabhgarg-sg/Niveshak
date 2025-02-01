@@ -88,12 +88,11 @@ class Nifty:
     def stock_stochastic(self):
         # Use the values for Stochastic Oscillator 10,3,3 for aggressive short term swing trading.
         # Use the values for Stochastic Oscillator 21,5,5 for conservative medium term swing trading.
-        stoch_data = talib.STOCHF(
+        stoch_data = talib.STOCH(
             high=self.stock_history[NSE.HISTCOL_HIGH],
             low=self.stock_history[NSE.HISTCOL_LOW],
             close=self.stock_history[NSE.HISTCOL_CLOSE],
             fastk_period=10,
-            fastd_period=3,
         )
         return [round(float(st_data.iloc[-1]), 2) for st_data in stoch_data]
 

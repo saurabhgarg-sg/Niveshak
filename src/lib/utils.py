@@ -20,4 +20,8 @@ class Utils:
     @staticmethod
     def percentage_diff(a, b):
         """calculate the percentage difference between b and a."""
+        # sometimes for new listed entities data is not available.
+        if a == 0:
+            return 0.0
+
         return round((a - b) * 100 / a, 2)
