@@ -145,6 +145,10 @@ class Nifty:
             else:
                 msg = "Downtrend"
 
+        if self.stock_info[InfoKeys.STOCH_K] > self.stock_info[InfoKeys.STOCH_D]:
+            msg += " Rise"
+        else:
+            msg += " Fall"
         self.stock_info[InfoKeys.SIGNAL] += f" {msg}"
 
     def find_bb_trend(self):
@@ -152,9 +156,9 @@ class Nifty:
         msg = ""
 
         if self.stock_info[InfoKeys.LAST_PRICE] > self.stock_info[InfoKeys.BB_HIGH]:
-            msg = "Sell"
+            msg = "Sell."
         elif self.stock_info[InfoKeys.LAST_PRICE] < self.stock_info[InfoKeys.BB_LOW]:
-            msg = "Buy"
+            msg = "Buy."
         else:
             msg = "."
         self.stock_info[InfoKeys.SIGNAL] += f" {msg}"
