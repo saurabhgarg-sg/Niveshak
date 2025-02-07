@@ -1,0 +1,4 @@
+.DS_Store
+*.pyc
+# prevent unintentional upload of actual portfolio data.
+src/data/watchlists
