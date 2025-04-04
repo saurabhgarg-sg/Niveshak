@@ -36,7 +36,7 @@ class Niveshak:
             self.list_symbols = wl.watchlists[self.list_name]
             st.write(self.show_list_info())
 
-    @pyinstrument.profile()
+    @pyinstrument.profile(use_timing_thread=True)
     def show_list_info(self):
         """display the stock information for each of the list element."""
         with concurrent.futures.ProcessPoolExecutor(
@@ -76,7 +76,12 @@ class Niveshak:
             RawInfoKeys.LOWER_CKT.name,
         ]
 
-        return df[new_order]
+        try:
+            arranged_df = df[new_order]
+        except KeyError as kerr:
+            logging.error(f"failed to arrange the columns: {str(kerr)}")
+            return df
+        return arranged_df
 
     def display_welcome_page(self) -> None:
         """Show the main page to start the scanners."""
