@@ -5,8 +5,8 @@ from pprint import pformat
 import requests
 import talib
 
-from constants.config import Configuration
-from constants.stocks import RawInfoKeys, NSE, InfoKeys
+from constants.config import Configuration, LiveDataLibrary
+from constants.stocks import RawInfoKeys, NSE, InfoKeys, RawInfoKeysYF
 from lib.nifty_live import NiftyLive
 from lib.utils import Utils
 
@@ -26,42 +26,54 @@ class Nifty:
         raw_info = None
         try:
             raw_info = NiftyLive.get_stock_quotes(self.stock_info[InfoKeys.SYMBOL])
-        except requests.exceptions.JSONDecodeError as jerr:
+        except requests.exceptions.JSONDecodeError as json_err:
             logging.error(f"failed to get stock into for '{symbol}'.")
-            logging.error(str(jerr))
+            logging.error(str(json_err))
 
-        if raw_info and raw_info.get("info"):
+        if raw_info and (
+            Configuration.LIVE_DATA_LIB == LiveDataLibrary.YFINANCE
+            or (
+                Configuration.LIVE_DATA_LIB == LiveDataLibrary.NSEPYTHON
+                and raw_info.get("info")
+            )
+        ):
             logging.debug(pformat(raw_info))
         else:
             logging.error(f"failed to get info on '{symbol}'.")
+            return None
 
         logging.info(f"fetching information on '{self.stock_info[InfoKeys.SYMBOL]}'.")
-        for infokey in RawInfoKeys:
-            # construct the key to fetch the value.
-            infoval = raw_info
-            for key in infokey.value:
-                infoval = infoval.get(key)
-                if not infoval:
-                    break
-            self.stock_info[infokey.name] = infoval
+        if Configuration.LIVE_DATA_LIB == LiveDataLibrary.NSEPYTHON:
+            for infokey in RawInfoKeys:
+                # construct the key to fetch the value.
+                infoval = raw_info
+                for key in infokey.value:
+                    infoval = infoval.get(key)
+                    if not infoval:
+                        break
+                self.stock_info[infokey.name] = infoval
+        else:
+            for infokey in RawInfoKeysYF:
+                self.stock_info[infokey.name] = raw_info[infokey]
+        del raw_info
 
-        self.stock_history = NiftyLive.get_historical_data(
-            self.stock_info[InfoKeys.SYMBOL]
-        )
-        if len(self.stock_history) != 0 and not self.stock_history.empty:
-            # Add the calculated indicators.
-            self.stock_info[InfoKeys.RSI] = self.stock_rsi()
-            self.stock_info[InfoKeys.ADX] = self.stock_adx()
-            self.stock_info[InfoKeys.BB_HIGH] = self.stock_bollinger_bands()[0]
-            self.stock_info[InfoKeys.BB_AVG] = self.stock_bollinger_bands()[1]
-            self.stock_info[InfoKeys.BB_LOW] = self.stock_bollinger_bands()[2]
-            self.stock_info[InfoKeys.STOCH_K] = self.stock_stochastic()[0]
-            self.stock_info[InfoKeys.STOCH_D] = self.stock_stochastic()[1]
-            self.stock_info[InfoKeys.EMA_20] = self.stock_ema()
-
-            # Deduce signal for trade.
-            self.stock_info[InfoKeys.EMA_DELTA] = self.stock_ema_delta()
-            self.guess_trade_signal()
+        # self.stock_history = NiftyLive.get_historical_data(
+        #     self.stock_info[InfoKeys.SYMBOL]
+        # )
+        # if len(self.stock_history) != 0 and not self.stock_history.empty:
+        #     # Add the calculated indicators.
+        #     self.stock_info[InfoKeys.RSI] = self.stock_rsi()
+        #     self.stock_info[InfoKeys.ADX] = self.stock_adx()
+        #     self.stock_info[InfoKeys.BB_HIGH] = self.stock_bollinger_bands()[0]
+        #     self.stock_info[InfoKeys.BB_AVG] = self.stock_bollinger_bands()[1]
+        #     self.stock_info[InfoKeys.BB_LOW] = self.stock_bollinger_bands()[2]
+        #     self.stock_info[InfoKeys.STOCH_K] = self.stock_stochastic()[0]
+        #     self.stock_info[InfoKeys.STOCH_D] = self.stock_stochastic()[1]
+        #     self.stock_info[InfoKeys.EMA_20] = self.stock_ema()
+        #
+        #     # Deduce signal for trade.
+        #     self.stock_info[InfoKeys.EMA_DELTA] = self.stock_ema_delta()
+        #     self.guess_trade_signal()
 
         logging.debug(pformat(self.stock_info))
         return self.stock_info

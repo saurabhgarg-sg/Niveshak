@@ -1,7 +1,6 @@
 import concurrent.futures
 import logging
 import sys
-from pprint import pformat
 
 import pandas as pd
 import pyinstrument
@@ -51,7 +50,8 @@ class Niveshak:
         data = list(results)
         return self.arrange_display_columns(pd.DataFrame(data))
 
-    def arrange_display_columns(self, df):
+    @staticmethod
+    def arrange_display_columns(df):
         """re-arrange the column display order."""
         new_order = [
             InfoKeys.SYMBOL,

@@ -1,0 +1,270 @@
+{
+  '52WeekChange': 0.16534543,
+  'SandP52WeekChange': 0.10128522,
+  'address1': 'Mahindra Towers',
+  'address2': 'Dr. G. M. Bhosale Marg Worli',
+  'ask': 0.0,
+  'askSize': 0,
+  'auditRisk': 3,
+  'averageDailyVolume10Day': 2519809,
+  'averageVolume': 3225729,
+  'averageVolume10days': 2519809,
+  'beta': 0.644,
+  'bid': 0.0,
+  'bidSize': 0,
+  'boardRisk': 3,
+  'bookValue': 690.158,
+  'city': 'Mumbai',
+  'companyOfficers': [
+    {
+      'age': 69,
+      'exercisedValue': 0,
+      'fiscalYear': 2024,
+      'maxAge': 1,
+      'name': 'Mr. Anand Gopal Mahindra',
+      'title': 'Non-Executive Chairman & Member of Group '
+      'Executive Board',
+      'totalPay': 51500000,
+      'unexercisedValue': 0,
+      'yearBorn': 1955
+    },
+    {
+      'age': 55,
+      'exercisedValue': 0,
+      'fiscalYear': 2024,
+      'maxAge': 1,
+      'name': 'Dr. Anish Dilip Shah Ph.D.',
+      'title': 'MD, Group CEO, Member of the Group Executive '
+      'Board & Director',
+      'totalPay': 242222000,
+      'unexercisedValue': 0,
+      'yearBorn': 1969
+    },
+    {
+      'age': 60,
+      'exercisedValue': 0,
+      'fiscalYear': 2024,
+      'maxAge': 1,
+      'name': 'Mr. Rajesh Ganesh Jejurikar',
+      'title': 'Executive Director & CEO of Automotive and '
+      'Farm Sectors & Member of Group Exe Board',
+      'totalPay': 192481000,
+      'unexercisedValue': 0,
+      'yearBorn': 1964
+    },
+    {
+      'age': 51,
+      'exercisedValue': 0,
+      'fiscalYear': 2024,
+      'maxAge': 1,
+      'name': 'Mr. Manoj  Bhat',
+      'title': 'Member of Group Executive Board',
+      'unexercisedValue': 0,
+      'yearBorn': 1973
+    },
+    {
+      'age': 46,
+      'exercisedValue': 0,
+      'fiscalYear': 2024,
+      'maxAge': 1,
+      'name': 'Mr. Amarjyoti  Barua',
+      'title': 'President & Group Chief Financial Officer & '
+      'Member of Executive Board',
+      'unexercisedValue': 0,
+      'yearBorn': 1978
+    },
+    {
+      'age': 61,
+      'exercisedValue': 0,
+      'fiscalYear': 2024,
+      'maxAge': 1,
+      'name': 'Mr. Ruzbeh  Irani',
+      'title': 'President of Group Human Resources & Member of '
+      'the Group Executive Board',
+      'unexercisedValue': 0,
+      'yearBorn': 1963
+    },
+    {
+      'exercisedValue': 0,
+      'fiscalYear': 2024,
+      'maxAge': 1,
+      'name': 'Mr. Hemant  Sikka',
+      'title': 'MD & CEO of Mahindra Logistics and Member of '
+      'Group Exe Board',
+      'unexercisedValue': 0
+    },
+    {
+      'exercisedValue': 0,
+      'fiscalYear': 2024,
+      'maxAge': 1,
+      'name': 'Mr. Veejay Ram Nakra',
+      'title': 'President of Farm Equipment Business & Member '
+      'of Group Executive Board',
+      'unexercisedValue': 0
+    },
+    {
+      'exercisedValue': 0,
+      'fiscalYear': 2024,
+      'maxAge': 1,
+      'name': 'Mr. Vinod  Sahay',
+      'title': 'President of Aerospace, Defence, Trucks, Buses '
+      '& CE and Member of Group Ex. Board',
+      'unexercisedValue': 0
+    },
+    {
+      'exercisedValue': 0,
+      'fiscalYear': 2024,
+      'maxAge': 1,
+      'name': 'Mr. Mohit  Kapoor',
+      'title': 'Group Chief Technology Officer & Member of the '
+      'Group Executive Board',
+      'unexercisedValue': 0
+    }
+  ],
+  'compensationAsOfEpochDate': 1735603200,
+  'compensationRisk': 7,
+  'country': 'India',
+  'currency': 'INR',
+  'currentPrice': 3012.7,
+  'currentRatio': 1.401,
+  'dayHigh': 3030.8,
+  'dayLow': 2984.2,
+  'debtToEquity': 144.812,
+  'dividendRate': 25.3,
+  'dividendYield': 0.0084,
+  'earningsGrowth': 0.181,
+  'earningsQuarterlyGrowth': 0.196,
+  'ebitda': 327300808704,
+  'ebitdaMargins': 0.2028,
+  'enterpriseToEbitda': 13.263,
+  'enterpriseToRevenue': 2.69,
+  'enterpriseValue': 4340996374528,
+  'exDividendDate': 1751500800,
+  'exchange': 'NSI',
+  'executiveTeam': [],
+  'fax': '91 22 2490 0833',
+  'fiftyDayAverage': 2821.365,
+  'fiftyTwoWeekHigh': 3270.95,
+  'fiftyTwoWeekLow': 2425.0,
+  'financialCurrency': 'INR',
+  'firstTradeDateEpochUtc': 820467900,
+  'fiveYearAvgDividendYield': 0.82,
+  'floatShares': 840313000,
+  'forwardPE': 21.67395,
+  'freeCashflow': 36339101696,
+  'gmtOffSetMilliseconds': 19800000,
+  'governanceEpochDate': 1746057600,
+  'grossMargins': 0.40677,
+  'grossProfits': 656491479040,
+  'heldPercentInsiders': 0.24499,
+  'heldPercentInstitutions': 0.49851,
+  'impliedSharesOutstanding': 1199640064,
+  'industry': 'Auto Manufacturers',
+  'industryDisp': 'Auto Manufacturers',
+  'industryKey': 'auto-manufacturers',
+  'lastDividendDate': 1751500800,
+  'lastDividendValue': 25.3,
+  'lastFiscalYearEnd': 1743379200,
+  'lastSplitDate': 1513814400,
+  'lastSplitFactor': '2:1',
+  'longBusinessSummary': 'Mahindra & Mahindra Limited provides mobility '
+  'products and farm solutions in India and '
+  'internationally. It operates through Automotive, Farm '
+  'Equipment, Financial Services, Real Estate, '
+  'Hospitality, and Others segments. The company offers '
+  'commercial vehicles, trucks, buses, vans, passenger '
+  'cars, utility vehicles, and electric vehicles (EV), '
+  'as well as motorcycles; aero and defense products; '
+  'offers construction equipment, such as rotaries, '
+  'tillers, loaders, and backhoes under the Mahindra '
+  'EarthMaster brand; and road construction equipment '
+  'comprising motor graders under the Mahindra '
+  'RoadMaster brand. It is also involved in the '
+  'provision of farm equipment, including tractors under '
+  'the Mahindra, Swaraj, and Trakstar brands, as well as '
+  'farm mechanization solutions, such as rotavators, '
+  'cultivators, harvesters, rice transplanters, balers, '
+  'sprayers, and implements and attachments; and '
+  'renewable energy business comprising installation of '
+  'EV chargers and provision of Li-ion batteries. In '
+  'addition, the company offers financial services, such '
+  'as fixed deposits, retail and other loans, leasing, '
+  'SME finance, housing finance, mutual funds, and life '
+  'and non-life insurance broking services, as well as '
+  'vehicle and equipment financing; provides logistics '
+  'services; power backup solutions, including diesel '
+  'and gas generators; and technology services '
+  'comprising business process, integrated engineering, '
+  'infrastructure and cloud, network, application '
+  'development and maintenance, supply chain digital '
+  'transformation, and design services. Further, it '
+  'engages in the sale of timeshare and vacation '
+  'ownership through its resorts; develops and sells '
+  'residential properties, and engages in the '
+  'development, management, and operation of commercial '
+  'complexes; and processing and trading of steel for '
+  'automotive, non-automotive, and power industries. The '
+  'company was incorporated in 1945 and is headquartered '
+  'in Mumbai, India.',
+  'longName': 'Mahindra & Mahindra Limited',
+  'marketCap': 3614155472896,
+  'maxAge': 86400,
+  'messageBoardId': 'finmb_878402',
+  'mostRecentQuarter': 1743379200,
+  'netIncomeToCommon': 129291001856,
+  'nextFiscalYearEnd': 1774915200,
+  'numberOfAnalystOpinions': 37,
+  'open': 3020.0,
+  'operatingCashflow': 31758100480,
+  'operatingMargins': 0.15276,
+  'overallRisk': 3,
+  'payoutRatio': 0.1834,
+  'phone': '91 22 2490 1441',
+  'previousClose': 3006.3,
+  'priceHint': 2,
+  'priceToBook': 4.365232,
+  'priceToSalesTrailing12Months': 2.2393663,
+  'profitMargins': 0.08011,
+  'quickRatio': 0.563,
+  'quoteType': 'EQUITY',
+  'recommendationKey': 'strong_buy',
+  'recommendationMean': 1.32432,
+  'regularMarketDayHigh': 3030.8,
+  'regularMarketDayLow': 2984.2,
+  'regularMarketOpen': 3020.0,
+  'regularMarketPreviousClose': 3006.3,
+  'regularMarketVolume': 1827842,
+  'returnOnAssets': 0.064840004,
+  'returnOnEquity': 0.16894,
+  'revenueGrowth': 0.223,
+  'revenuePerShare': 1446.886,
+  'sector': 'Consumer Cyclical',
+  'sectorDisp': 'Consumer Cyclical',
+  'sectorKey': 'consumer-cyclical',
+  'shareHolderRightsRisk': 1,
+  'sharesOutstanding': 1199640064,
+  'shortName': 'MAHINDRA & MAHINDRA LTD',
+  'symbol': 'M%26M.NS',
+  'targetHighPrice': 4000.0,
+  'targetLowPrice': 2760.0,
+  'targetMeanPrice': 3562.4324,
+  'targetMedianPrice': 3600.0,
+  'timeZoneFullName': 'Asia/Kolkata',
+  'timeZoneShortName': 'IST',
+  'totalCash': 425623093248,
+  'totalCashPerShare': 381.297,
+  'totalDebt': 1290245767168,
+  'totalRevenue': 1613918765056,
+  'tradeable': False,
+  'trailingAnnualDividendRate': 25.3,
+  'trailingAnnualDividendYield': 0.00841566,
+  'trailingEps': 115.14,
+  'trailingPE': 26.165537,
+  'trailingPegRatio': None,
+  'twoHundredDayAverage': 2897.8337,
+  'underlyingSymbol': 'M&M.NS',
+  'uuid': '08f0f1eb-593a-354a-a5bd-38231342ca8a',
+  'volume': 1827842,
+  'website': 'https://www.mahindra.com',
+  'zip': '400018'
+}

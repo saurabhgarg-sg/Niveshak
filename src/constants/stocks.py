@@ -2,7 +2,7 @@ from enum import Enum, StrEnum
 
 
 class RawInfoKeys(Enum):
-    """List of all the keys of interest from Nifty stock data.`"""
+    """List of all the keys of interest from Nifty stock data."""
 
     """Informational"""
     # BASIC_INDSUTRY = ["industryInfo", "basicIndustry"]
@@ -19,6 +19,16 @@ class RawInfoKeys(Enum):
     YEAR_LOW = ["priceInfo", "weekHighLow", "min"]
     UPPER_CKT = ["priceInfo", "upperCP"]
     LOWER_CKT = ["priceInfo", "lowerCP"]
+
+
+class RawInfoKeysYF(StrEnum):
+    """List of all the keys of interest from Yahoo finance stock data."""
+
+    LAST_CLOSE = "previousClose"
+    INTRADAY_HIGH = "dayHigh"
+    INTRADAY_LOW = "dayLow"
+    YEAR_HIGH = "fiftyTwoWeekHigh"
+    YEAR_LOW = "fiftyTwoWeekLow"
 
 
 class InfoKeys(StrEnum):
