@@ -1,6 +1,7 @@
 import logging
 import sys
 from pprint import pformat
+from urllib.parse import quote
 
 import requests
 import talib
@@ -19,13 +20,15 @@ class Nifty:
     def __init__(self):
         self.stock_info = None
         self.stock_history = None
+        self.safe_symbol = None
 
     def get_stock_info(self, symbol: str):
         """fetch individual stock information."""
         self.stock_info = {InfoKeys.SYMBOL: symbol}
+        self.safe_symbol = quote(symbol, safe="")
         raw_info = None
         try:
-            raw_info = NiftyLive.get_stock_quotes(self.stock_info[InfoKeys.SYMBOL])
+            raw_info = NiftyLive.get_stock_quotes(self.safe_symbol)
         except requests.exceptions.JSONDecodeError as json_err:
             logging.error(f"failed to get stock into for '{symbol}'.")
             logging.error(str(json_err))
@@ -57,23 +60,21 @@ class Nifty:
                 self.stock_info[infokey.name] = raw_info[infokey]
         del raw_info
 
-        # self.stock_history = NiftyLive.get_historical_data(
-        #     self.stock_info[InfoKeys.SYMBOL]
-        # )
-        # if len(self.stock_history) != 0 and not self.stock_history.empty:
-        #     # Add the calculated indicators.
-        #     self.stock_info[InfoKeys.RSI] = self.stock_rsi()
-        #     self.stock_info[InfoKeys.ADX] = self.stock_adx()
-        #     self.stock_info[InfoKeys.BB_HIGH] = self.stock_bollinger_bands()[0]
-        #     self.stock_info[InfoKeys.BB_AVG] = self.stock_bollinger_bands()[1]
-        #     self.stock_info[InfoKeys.BB_LOW] = self.stock_bollinger_bands()[2]
-        #     self.stock_info[InfoKeys.STOCH_K] = self.stock_stochastic()[0]
-        #     self.stock_info[InfoKeys.STOCH_D] = self.stock_stochastic()[1]
-        #     self.stock_info[InfoKeys.EMA_20] = self.stock_ema()
-        #
-        #     # Deduce signal for trade.
-        #     self.stock_info[InfoKeys.EMA_DELTA] = self.stock_ema_delta()
-        #     self.guess_trade_signal()
+        self.stock_history = NiftyLive.get_historical_data(self.safe_symbol)
+        if len(self.stock_history) != 0 and not self.stock_history.empty:
+            # Add the calculated indicators.
+            self.stock_info[InfoKeys.RSI] = self.stock_rsi()
+            self.stock_info[InfoKeys.ADX] = self.stock_adx()
+            self.stock_info[InfoKeys.BB_HIGH] = self.stock_bollinger_bands()[0]
+            self.stock_info[InfoKeys.BB_AVG] = self.stock_bollinger_bands()[1]
+            self.stock_info[InfoKeys.BB_LOW] = self.stock_bollinger_bands()[2]
+            self.stock_info[InfoKeys.STOCH_K] = self.stock_stochastic()[0]
+            self.stock_info[InfoKeys.STOCH_D] = self.stock_stochastic()[1]
+            self.stock_info[InfoKeys.EMA_20] = self.stock_ema()
+
+            # Deduce signal for trade.
+            self.stock_info[InfoKeys.EMA_DELTA] = self.stock_ema_delta()
+            self.guess_trade_signal()
 
         logging.debug(pformat(self.stock_info))
         return self.stock_info

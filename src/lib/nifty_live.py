@@ -12,6 +12,7 @@ from nsepython import nse_eq, equity_history
 
 from constants.config import Configuration, LiveDataLibrary
 from constants.stocks import NSE
+from examples.yahoo_finance import historical_data
 from lib.utils import Utils
 from urllib.parse import quote
 import time
@@ -31,7 +32,6 @@ class NiftyLive:
         while attempts > 0:
             try:
                 stock_quotes = None
-                symbol = quote(symbol, safe="")
                 if Configuration.LIVE_DATA_LIB == LiveDataLibrary.NSEPYTHON:
                     stock_quotes = nse_eq(symbol)
                 else:
@@ -49,21 +49,30 @@ class NiftyLive:
     @st.cache_data
     def get_historical_data(symbol: str):
         """get historical data for any stock."""
-        try:
-            historical_data = equity_history(
-                symbol=quote(symbol, safe=""),
-                series=NSE.STOCK_CODE,
-                start_date=Utils.get_lookback_date(),
-                end_date=Utils.get_ist_date(),
-            )
-        except requests.exceptions.JSONDecodeError as jerr:
-            logging.error(f"failed to get any response for '{symbol}'.")
-            logging.error(str(jerr))
-            return {}
+        historical_data = None
+        if Configuration.LIVE_DATA_LIB == LiveDataLibrary.NSEPYTHON:
+            try:
+                historical_data = equity_history(
+                    symbol=symbol,
+                    series=NSE.STOCK_CODE,
+                    start_date=Utils.get_lookback_date(),
+                    end_date=Utils.get_ist_date(),
+                )
+            except requests.exceptions.JSONDecodeError as jerr:
+                logging.error(f"failed to get any response for '{symbol}'.")
+                logging.error(str(jerr))
+                return {}
+        else:
+            yf_ticker = yf.Ticker("SAIL.NS")
+            historical_data = yf_ticker.history(period=NSE.YF_LOOKBACK_PERIOD)
 
         if historical_data.empty:
             logging.error(f"failed to get any data, check the symbol '{symbol}'.")
             return {}
 
-        historical_data.sort_values(by=NSE.HISTCOL_SORTER, ascending=True, inplace=True)
+        sorter_col = NSE.YF_HISTCOL_SORTER
+        if Configuration.LIVE_DATA_LIB == LiveDataLibrary.NSEPYTHON:
+            sorter_col = NSE.HISTCOL_SORTER
+        historical_data.sort_values(by=sorter_col, ascending=True, inplace=True)
+        logging.debug(pprint.pformat(historical_data))
         return historical_data

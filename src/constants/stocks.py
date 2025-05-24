@@ -4,12 +4,6 @@ from enum import Enum, StrEnum
 class RawInfoKeys(Enum):
     """List of all the keys of interest from Nifty stock data."""
 
-    """Informational"""
-    # BASIC_INDSUTRY = ["industryInfo", "basicIndustry"]
-    # INDSUTRY = ["industryInfo", "industry"]
-    # SECTOR = ["industryInfo", "sector"]
-    # COMPANY_NAME = ["info", "companyName"]
-
     """Price information"""
     LAST_PRICE = ["priceInfo", "lastPrice"]
     LAST_CLOSE = ["priceInfo", "previousClose"]
@@ -55,12 +49,15 @@ class NSE(StrEnum):
     STOCK_CODE = "EQ"
     DATE_FORMAT = "%d-%m-%Y"
     LOOKBACK_DAYS = "180"
+    YF_LOOKBACK_PERIOD = "6mo"
 
     # Historical data columns.
     HISTCOL_CLOSE = "CH_CLOSING_PRICE"
     HISTCOL_HIGH = "CH_TRADE_HIGH_PRICE"
     HISTCOL_LOW = "CH_TRADE_LOW_PRICE"
     HISTCOL_SORTER = "CH_TIMESTAMP"
+
+    YF_HISTCOL_SORTER = "Date"
 
     # Indicator settings.
     DEFAULT_TIMEPERIOD = "14"
