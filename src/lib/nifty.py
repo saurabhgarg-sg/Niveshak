@@ -1,4 +1,5 @@
 import logging
+import pprint
 import sys
 from pprint import pformat
 from urllib.parse import quote
@@ -21,6 +22,15 @@ class Nifty:
         self.stock_info = None
         self.stock_history = None
         self.safe_symbol = None
+
+        self.stock_history_close = NSE.YF_HISTCOL_CLOSE
+        self.stock_history_high = NSE.YF_HISTCOL_HIGH
+        self.stock_history_low = NSE.YF_HISTCOL_LOW
+
+        if Configuration.LIVE_DATA_LIB == LiveDataLibrary.NSEPYTHON:
+            self.stock_history_close = NSE.HISTCOL_CLOSE
+            self.stock_history_high = NSE.HISTCOL_HIGH
+            self.stock_history_low = NSE.HISTCOL_LOW
 
     def get_stock_info(self, symbol: str):
         """fetch individual stock information."""
@@ -61,6 +71,7 @@ class Nifty:
         del raw_info
 
         self.stock_history = NiftyLive.get_historical_data(self.safe_symbol)
+        logging.debug(pprint.pformat(self.stock_history))
         if len(self.stock_history) != 0 and not self.stock_history.empty:
             # Add the calculated indicators.
             self.stock_info[InfoKeys.RSI] = self.stock_rsi()
@@ -70,30 +81,31 @@ class Nifty:
             self.stock_info[InfoKeys.BB_LOW] = self.stock_bollinger_bands()[2]
             self.stock_info[InfoKeys.STOCH_K] = self.stock_stochastic()[0]
             self.stock_info[InfoKeys.STOCH_D] = self.stock_stochastic()[1]
-            self.stock_info[InfoKeys.EMA_20] = self.stock_ema()
-
-            # Deduce signal for trade.
-            self.stock_info[InfoKeys.EMA_DELTA] = self.stock_ema_delta()
-            self.guess_trade_signal()
+            # self.stock_info[InfoKeys.EMA_20] = self.stock_ema()
+            #
+            # # Deduce signal for trade.
+            # self.stock_info[InfoKeys.EMA_DELTA] = self.stock_ema_delta()
+            # self.guess_trade_signal()
 
         logging.debug(pformat(self.stock_info))
         return self.stock_info
 
     def stock_rsi(self):
         rsi_data = talib.RSI(
-            self.stock_history[NSE.HISTCOL_CLOSE], int(NSE.DEFAULT_TIMEPERIOD)
+            self.stock_history[self.stock_history_close], int(NSE.DEFAULT_TIMEPERIOD)
         )
         return round(float(rsi_data.iloc[-1]), 2)
 
     def stock_bollinger_bands(self):
-        bband_data = talib.BBANDS(self.stock_history[NSE.HISTCOL_CLOSE], 20)
+        bband_data = talib.BBANDS(self.stock_history[self.stock_history_close], 20)
         return [round(float(bb_data.iloc[-1]), 2) for bb_data in bband_data]
 
     def stock_adx(self):
+
         adx_data = talib.ADX(
-            high=self.stock_history[NSE.HISTCOL_HIGH],
-            low=self.stock_history[NSE.HISTCOL_LOW],
-            close=self.stock_history[NSE.HISTCOL_CLOSE],
+            high=self.stock_history[self.stock_history_high],
+            low=self.stock_history[self.stock_history_low],
+            close=self.stock_history[self.stock_history_close],
             timeperiod=int(NSE.DEFAULT_TIMEPERIOD),
         )
         return round(float(adx_data.iloc[-1]), 2)
@@ -102,15 +114,17 @@ class Nifty:
         # Use the values for Stochastic Oscillator 10,3,3 for aggressive short term swing trading.
         # Use the values for Stochastic Oscillator 21,5,5 for conservative medium term swing trading.
         stoch_data = talib.STOCH(
-            high=self.stock_history[NSE.HISTCOL_HIGH],
-            low=self.stock_history[NSE.HISTCOL_LOW],
-            close=self.stock_history[NSE.HISTCOL_CLOSE],
+            high=self.stock_history[self.stock_history_high],
+            low=self.stock_history[self.stock_history_low],
+            close=self.stock_history[self.stock_history_close],
             fastk_period=10,
         )
         return [round(float(st_data.iloc[-1]), 2) for st_data in stoch_data]
 
     def stock_ema(self):
-        ema_data = talib.EMA(self.stock_history[NSE.HISTCOL_CLOSE], timeperiod=20)
+        ema_data = talib.EMA(
+            self.stock_history[self.stock_history_close], timeperiod=20
+        )
         return round(float(ema_data.iloc[-1]), 2)
 
     def stock_ema_delta(self):

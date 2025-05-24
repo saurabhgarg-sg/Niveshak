@@ -57,6 +57,9 @@ class NSE(StrEnum):
     HISTCOL_LOW = "CH_TRADE_LOW_PRICE"
     HISTCOL_SORTER = "CH_TIMESTAMP"
 
+    YF_HISTCOL_CLOSE = "Close"
+    YF_HISTCOL_HIGH = "High"
+    YF_HISTCOL_LOW = "Low"
     YF_HISTCOL_SORTER = "Date"
 
     # Indicator settings.

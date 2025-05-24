@@ -63,7 +63,7 @@ class NiftyLive:
                 logging.error(str(jerr))
                 return {}
         else:
-            yf_ticker = yf.Ticker("SAIL.NS")
+            yf_ticker = yf.Ticker(symbol)
             historical_data = yf_ticker.history(period=NSE.YF_LOOKBACK_PERIOD)
 
         if historical_data.empty:
@@ -74,5 +74,4 @@ class NiftyLive:
         if Configuration.LIVE_DATA_LIB == LiveDataLibrary.NSEPYTHON:
             sorter_col = NSE.HISTCOL_SORTER
         historical_data.sort_values(by=sorter_col, ascending=True, inplace=True)
-        logging.debug(pprint.pformat(historical_data))
         return historical_data
