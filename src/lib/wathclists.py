@@ -25,7 +25,7 @@ class Watchlists:
         return content
 
     def get_all(self):
-        """Get all the watchlists."""
+        """Get all the nse-watchlists."""
         for entry in os.scandir(DataFiles.WATCHLISTS):
             if entry.is_file() and entry.name not in self.exclude_list:
                 logging.info(f"reading {entry.name}")
