@@ -7,7 +7,7 @@ import pyinstrument
 import streamlit as st
 
 from constants.config import Configuration
-from constants.stocks import InfoKeys, RawInfoKeys
+from constants.stocks import InfoKeys, RawInfoKeys, RawInfoKeysYF
 from lib.nifty import Nifty
 from lib.wathclists import Watchlists
 
@@ -55,25 +55,24 @@ class Niveshak:
         """re-arrange the column display order."""
         new_order = [
             InfoKeys.SYMBOL,
+            InfoKeys.NAME,
             InfoKeys.SIGNAL,
-            InfoKeys.EMA_DELTA,
             InfoKeys.RSI,
             InfoKeys.ADX,
-            InfoKeys.EMA_20,
+            InfoKeys.EMA_DELTA,
             InfoKeys.STOCH_DELTA,
             InfoKeys.STOCH_K,
             InfoKeys.STOCH_D,
-            InfoKeys.BB_HIGH,
-            InfoKeys.BB_AVG,
-            InfoKeys.BB_LOW,
             InfoKeys.LAST_PRICE,
             RawInfoKeys.INTRADAY_HIGH.name,
             RawInfoKeys.INTRADAY_LOW.name,
             RawInfoKeys.LAST_CLOSE.name,
             RawInfoKeys.YEAR_HIGH.name,
             RawInfoKeys.YEAR_LOW.name,
-            RawInfoKeys.UPPER_CKT.name,
-            RawInfoKeys.LOWER_CKT.name,
+            InfoKeys.EMA_20,
+            InfoKeys.BB_HIGH,
+            InfoKeys.BB_AVG,
+            InfoKeys.BB_LOW,
         ]
 
         try:

@@ -12,7 +12,6 @@ from nsepython import nse_eq, equity_history
 
 from constants.config import Configuration, LiveDataLibrary
 from constants.stocks import NSE
-from examples.yahoo_finance import historical_data
 from lib.utils import Utils
 from urllib.parse import quote
 import time
@@ -32,10 +31,10 @@ class NiftyLive:
         while attempts > 0:
             try:
                 stock_quotes = None
-                if Configuration.LIVE_DATA_LIB == LiveDataLibrary.NSEPYTHON:
-                    stock_quotes = nse_eq(symbol)
-                else:
+                if Configuration.LIVE_DATA_LIB == LiveDataLibrary.YFINANCE:
                     stock_quotes = yf.Ticker(symbol).info
+                else:
+                    stock_quotes = nse_eq(symbol)
                 break
             except requests.exceptions.JSONDecodeError as e:
                 print(f"failed to fetch data for stock symbol {symbol}")
@@ -50,7 +49,10 @@ class NiftyLive:
     def get_historical_data(symbol: str):
         """get historical data for any stock."""
         historical_data = None
-        if Configuration.LIVE_DATA_LIB == LiveDataLibrary.NSEPYTHON:
+        if Configuration.LIVE_DATA_LIB == LiveDataLibrary.YFINANCE:
+            yf_ticker = yf.Ticker(symbol)
+            historical_data = yf_ticker.history(period=NSE.YF_LOOKBACK_PERIOD)
+        else:
             try:
                 historical_data = equity_history(
                     symbol=symbol,
@@ -62,9 +64,6 @@ class NiftyLive:
                 logging.error(f"failed to get any response for '{symbol}'.")
                 logging.error(str(jerr))
                 return {}
-        else:
-            yf_ticker = yf.Ticker(symbol)
-            historical_data = yf_ticker.history(period=NSE.YF_LOOKBACK_PERIOD)
 
         if historical_data.empty:
             logging.error(f"failed to get any data, check the symbol '{symbol}'.")

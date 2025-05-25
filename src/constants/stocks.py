@@ -18,9 +18,12 @@ class RawInfoKeys(Enum):
 class RawInfoKeysYF(StrEnum):
     """List of all the keys of interest from Yahoo finance stock data."""
 
+    ETF_LAST_PRICE = "regularMarketPrice"
     LAST_CLOSE = "previousClose"
+    LAST_PRICE = "currentPrice"
     INTRADAY_HIGH = "dayHigh"
     INTRADAY_LOW = "dayLow"
+    NAME = "longName"
     YEAR_HIGH = "fiftyTwoWeekHigh"
     YEAR_LOW = "fiftyTwoWeekLow"
 
@@ -35,6 +38,7 @@ class InfoKeys(StrEnum):
     EMA_20 = "20-EMA"
     EMA_DELTA = "Δ EMA"
     LAST_PRICE = "LAST_PRICE"
+    NAME = "NAME"
     RSI = "RSI"
     SIGNAL = "SIGNAL"
     STOCH_K = "%K"
