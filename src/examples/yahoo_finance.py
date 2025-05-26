@@ -3,7 +3,8 @@ from pprint import pprint
 import pandas
 import yfinance as yf
 
-dat = yf.Ticker("NIFTYBEES.NS")
+# dat = yf.Ticker("NIFTYBEES.NS")
+dat = yf.Ticker("^NSEI")
 # pprint(dat.fast_info)
 pprint(dat.info)
 # pprint(dat.calendar)

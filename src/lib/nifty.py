@@ -70,6 +70,10 @@ class Nifty:
                     RawInfoKeysYF.ETF_LAST_PRICE
                 ]
             self.stock_info.pop(RawInfoKeysYF.ETF_LAST_PRICE.name)
+
+            # Handle when company name could not be fetched.
+            if self.stock_info[InfoKeys.NAME] == 0:
+                self.stock_info[InfoKeys.NAME] = str(self.stock_info[InfoKeys.NAME])
         else:
             for infokey in RawInfoKeys:
                 # construct the key to fetch the value.
