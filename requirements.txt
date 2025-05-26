@@ -4,5 +4,6 @@ pandas
 pyinstrument
 streamlit
 ta-lib
+ta-lib-bin
 watchdog
 yfinance
