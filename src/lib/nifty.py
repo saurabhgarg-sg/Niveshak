@@ -4,6 +4,7 @@ import sys
 from pprint import pformat
 from urllib.parse import quote
 
+import curl_cffi
 import requests
 import talib
 
@@ -11,6 +12,7 @@ from constants.config import Configuration, LiveDataLibrary
 from constants.stocks import RawInfoKeys, NSE, InfoKeys, RawInfoKeysYF
 from lib.nifty_live import NiftyLive
 from lib.utils import Utils
+import yfinance as yf
 
 logging.basicConfig(stream=sys.stdout, level=Configuration.LOG_LEVEL)
 
@@ -34,8 +36,10 @@ class Nifty:
 
     def get_stock_info(self, symbol: str):
         """fetch individual stock information."""
+
         self.stock_info = {InfoKeys.SYMBOL: symbol}
         self.safe_symbol = quote(symbol, safe="")
+        self.validate_symbol()
         raw_info = None
         try:
             raw_info = NiftyLive.get_stock_quotes(self.safe_symbol)
@@ -55,7 +59,7 @@ class Nifty:
             logging.error(f"failed to get info on '{symbol}'.")
             return None
 
-        logging.info(f"fetching information on '{self.stock_info[InfoKeys.SYMBOL]}'.")
+        logging.debug(f"fetching information on '{self.stock_info[InfoKeys.SYMBOL]}'.")
         if Configuration.LIVE_DATA_LIB == LiveDataLibrary.YFINANCE:
             for infokey in RawInfoKeysYF:
                 self.stock_info[infokey.name] = raw_info.get(infokey, 0)
@@ -211,3 +215,12 @@ class Nifty:
         self.find_adx_trend()
         self.find_stoch_trend()
         self.find_bb_trend()
+
+    def validate_symbol(self):
+        """validate the stock ticker symbol"""
+        yf_ticker = yf.Ticker(self.safe_symbol)
+        try:
+            yf_ticker.isin
+        except curl_cffi.requests.exceptions.HTTPError:
+            logging.error(f"invalid stock symbol: {self.safe_symbol}.")
+            self.safe_symbol = "SBIN.NS"

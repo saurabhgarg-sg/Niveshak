@@ -6,6 +6,7 @@ import logging
 import pprint
 import sys
 
+import curl_cffi
 import requests
 import streamlit as st
 from nsepython import nse_eq, equity_history
@@ -23,7 +24,6 @@ logging.basicConfig(stream=sys.stdout, level=Configuration.LOG_LEVEL)
 class NiftyLive:
 
     @staticmethod
-    @st.cache_data
     def get_stock_quotes(symbol: str):
         """fetch individual stock information."""
         attempts = 3
@@ -45,7 +45,6 @@ class NiftyLive:
         return stock_quotes
 
     @staticmethod
-    @st.cache_data
     def get_historical_data(symbol: str):
         """get historical data for any stock."""
         historical_data = None

@@ -9,7 +9,7 @@ pandas.set_option("display.max_columns", None)
 # pprint(indices)
 # pprint(nse_eq("ABSLPSE"))
 try:
-    test = nse_eq("ZFCVINDIA")
+    test = nse_eq("RAYMOND")
     pprint(test)
 except requests.exceptions.JSONDecodeError as e:
     print("failed to fetch data for stock symbol")
