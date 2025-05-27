@@ -9,8 +9,8 @@ pandas.set_option("display.max_columns", None)
 # pprint(indices)
 # pprint(nse_eq("ABSLPSE"))
 try:
-    test = nse_eq("SBIN")
-    pprint(test) 
+    test = nse_eq("ZFCVINDIA")
+    pprint(test)
 except requests.exceptions.JSONDecodeError as e:
     print("failed to fetch data for stock symbol")
 # pprint(nse_get_top_gainers())
