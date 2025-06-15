@@ -80,7 +80,7 @@ class Niveshak:
         except KeyError as kerr:
             logging.error(f"failed to arrange the columns: {str(kerr)}")
             return df
-        return arranged_df
+        return arranged_df.sort_values(by=InfoKeys.SIGNAL)
 
     def display_welcome_page(self) -> None:
         """Show the main page to start the scanners."""
