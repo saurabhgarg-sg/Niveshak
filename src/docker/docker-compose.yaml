@@ -1,0 +1,8 @@
+services:
+  python-talib:
+    image: ghcr.io/ukewea/python-talib:latest
+    container_name: python-talib
+    working_dir: /Users/sg/github/Niveshak
+    volumes:
+      - ./:/Users/sg/github/Niveshak
+    command: /venv/bin/python testscript.py
