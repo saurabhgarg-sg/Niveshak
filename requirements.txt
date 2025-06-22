@@ -1,9 +1,8 @@
-nsepython~=2.95
-pandas~=2.2.3
-#pyinstrument~=5.0.2
-streamlit~=1.45.1
-yfinance~=0.2.61
-curl_cffi~=0.11.1
-requests~=2.32.3
-numpy~=2.2.4
-TA-Lib-Precompiled
+nsepython
+pandas
+pyinstrument
+streamlit
+yfinance
+curl_cffi
+requests
+numpy
