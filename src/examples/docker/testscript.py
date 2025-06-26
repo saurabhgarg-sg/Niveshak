@@ -1,7 +1,7 @@
 import random
-import talib
-import numpy as np
 
+import numpy as np
+import talib
 
 # Generate a list of 100 pseudo-random "closing prices"
 random.seed(42)  # For reproducible results

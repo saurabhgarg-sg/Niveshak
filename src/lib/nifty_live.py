@@ -5,18 +5,15 @@ This separate class is a collection of static methods to allow caching.
 import logging
 import pprint
 import sys
+import time
 
-import curl_cffi
 import requests
-import streamlit as st
+import yfinance as yf
 from nsepython import nse_eq, equity_history
 
 from constants.config import Configuration, LiveDataLibrary
 from constants.stocks import NSE
 from lib.utils import Utils
-from urllib.parse import quote
-import time
-import yfinance as yf
 
 logging.basicConfig(stream=sys.stdout, level=Configuration.LOG_LEVEL)
 
@@ -26,6 +23,8 @@ class NiftyLive:
     @staticmethod
     def get_stock_quotes(symbol: str):
         """fetch individual stock information."""
+        unsafe_session = requests.session()
+        unsafe_session.verify = False
         attempts = 3
         stock_quotes = {}
         while attempts > 0:
@@ -47,6 +46,8 @@ class NiftyLive:
     @staticmethod
     def get_historical_data(symbol: str):
         """get historical data for any stock."""
+        unsafe_session = requests.session()
+        unsafe_session.verify = False
         historical_data = None
         if Configuration.LIVE_DATA_LIB == LiveDataLibrary.YFINANCE:
             yf_ticker = yf.Ticker(symbol)

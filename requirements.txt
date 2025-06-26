@@ -2,8 +2,8 @@ nsepython
 pandas
 pyinstrument
 streamlit
-certifi
 yfinance
-curl_cffi
 requests
 numpy
+
+curl_cffi

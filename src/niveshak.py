@@ -7,7 +7,7 @@ import pyinstrument
 import streamlit as st
 
 from constants.config import Configuration
-from constants.stocks import InfoKeys, RawInfoKeys, RawInfoKeysYF
+from constants.stocks import InfoKeys, RawInfoKeys
 from lib.nifty import Nifty
 from lib.wathclists import Watchlists
 

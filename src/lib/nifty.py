@@ -7,12 +7,12 @@ from urllib.parse import quote
 import curl_cffi
 import requests
 import talib
+import yfinance as yf
 
 from constants.config import Configuration, LiveDataLibrary
 from constants.stocks import RawInfoKeys, NSE, InfoKeys, RawInfoKeysYF
 from lib.nifty_live import NiftyLive
 from lib.utils import Utils
-import yfinance as yf
 
 logging.basicConfig(stream=sys.stdout, level=Configuration.LOG_LEVEL)
 
