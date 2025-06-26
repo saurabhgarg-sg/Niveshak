@@ -2,6 +2,7 @@ nsepython
 pandas
 pyinstrument
 streamlit
+certifi
 yfinance
 curl_cffi
 requests

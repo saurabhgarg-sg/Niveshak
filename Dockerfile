@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     software-properties-common \
     git \
+    vim \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir src
