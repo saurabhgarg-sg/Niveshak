@@ -127,7 +127,7 @@ class Nifty:
             high=self.stock_history[self.stock_history_high],
             low=self.stock_history[self.stock_history_low],
             close=self.stock_history[self.stock_history_close],
-            timeperiod=int(NSE.DEFAULT_TIMEPERIOD),
+            timeperiod=int(NSE.ADX_TIMEPERIOD),
         )
         return round(float(adx_data.iloc[-1]), 2)
 
