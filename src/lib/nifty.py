@@ -163,7 +163,7 @@ class Nifty:
             msg = "Strong"
             adx_strength = 1
         elif 50 < self.stock_info[InfoKeys.ADX] <= 75:
-            msg = "Very Strong"
+            msg = "Fairly Strong"
             adx_strength = 2
         elif self.stock_info[InfoKeys.ADX] > 75:
             msg = "Extremely Strong"
