@@ -68,4 +68,4 @@ class NSE(StrEnum):
 
     # Indicator settings.
     DEFAULT_TIMEPERIOD = "14"
-    ADX_TIMEPERIOD = "5"
+    ADX_TIMEPERIOD = "10"
