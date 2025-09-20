@@ -23,7 +23,7 @@ class Niveshak:
     def select_list(self):
         """Show the main page to start the scanners."""
         wl = Watchlists()
-        wl.get_all()
+        wl.get_all_lists()
         self.list_name = st.selectbox(
             "Which list to scan?",
             sorted(wl.watchlists.keys()),

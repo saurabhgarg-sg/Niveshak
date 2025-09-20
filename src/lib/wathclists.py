@@ -21,10 +21,10 @@ class Watchlists:
         """return the list of symbols from the watchlist."""
         content = []
         with open(path) as fh:
-            content = [txt.strip() for txt in fh.readlines()]
+            content = [txt.strip() for txt in fh.readlines() if len(txt) != 0]
         return content
 
-    def get_all(self):
+    def get_all_lists(self):
         """Get all the nse-watchlists."""
         for entry in os.scandir(DataFiles.WATCHLISTS):
             if entry.is_file() and entry.name not in self.exclude_list:
