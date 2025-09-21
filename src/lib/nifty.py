@@ -38,7 +38,7 @@ class Nifty:
         """fetch individual stock information."""
 
         self.stock_info = {InfoKeys.SYMBOL: symbol}
-        self.safe_symbol = quote(symbol, safe="")
+        self.safe_symbol = quote(symbol, safe="SBIN.NS")
         self.validate_symbol()
         raw_info = None
         try:

@@ -19,10 +19,10 @@ class Watchlists:
     @staticmethod
     def read_symbols(path) -> list:
         """return the list of symbols from the watchlist."""
-        content = []
+        symbols = []
         with open(path) as fh:
-            content = [txt.strip() for txt in fh.readlines() if len(txt) != 0]
-        return content
+            symbols = [symbol.strip() for symbol in fh.readlines() if len(symbol) != 0]
+        return symbols
 
     def get_all_lists(self):
         """Get all the nse-watchlists."""
